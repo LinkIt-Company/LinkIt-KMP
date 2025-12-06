@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace = "com.linkit.company.core.common"
+    namespace = "com.linkit.company.core.ui"
 }
 
 kotlin {

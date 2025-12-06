@@ -17,6 +17,7 @@ kotlin {
         commonMain.dependencies {
             // Core modules
             implementation(projects.core.common)
+            implementation(projects.core.ui)
             implementation(projects.core.designsystem)
             
             // Domain & Data
