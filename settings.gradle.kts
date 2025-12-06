@@ -33,6 +33,7 @@ include(":app")
 
 // Core modules
 include(":core:common")
+include(":core:ui")
 include(":core:designsystem")
 
 // Domain
