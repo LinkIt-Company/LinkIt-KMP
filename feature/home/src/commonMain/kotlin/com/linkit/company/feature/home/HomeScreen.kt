@@ -24,10 +24,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.layout.Layout
-import androidx.compose.ui.layout.MeasurePolicy
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.linkit.company.core.common.architecture.popup.PopupExposureType
 import com.linkit.company.feature.home.sample.HomeViewModel
 
 @Composable
@@ -35,10 +35,23 @@ fun HomeScreen() {
     val homeViewModel by lazy { HomeViewModel(SavedStateHandle()) }
     val uiState by homeViewModel.uiState.collectAsStateWithLifecycle()
 
+
     LaunchedEffect(key1 = Unit) {
         homeViewModel.sideEffect.collect {
             when (it) {
                 else -> {}
+            }
+        }
+    }
+
+    LaunchedEffect(key1 = Unit) {
+        homeViewModel.popupEffect.collect { exposureType ->
+            when (exposureType) {
+                is PopupExposureType.Toast -> {
+                }
+
+                is PopupExposureType.Dialog -> {
+                }
             }
         }
     }

@@ -13,7 +13,6 @@ interface SideEffectManager<SE : SideEffect> {
 
 internal class SideEffectManagerImpl<SE : SideEffect> : SideEffectManager<SE> {
     private val _sideEffect: Channel<SE> = Channel(
-        capacity = Channel.BUFFERED,
         onBufferOverflow = BufferOverflow.DROP_OLDEST,
     )
 
