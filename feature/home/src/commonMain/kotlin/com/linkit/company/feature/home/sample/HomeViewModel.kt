@@ -2,13 +2,15 @@ package com.linkit.company.feature.home.sample
 
 import androidx.lifecycle.SavedStateHandle
 import com.linkit.company.core.common.architecture.MVIViewModel
+import com.linkit.company.core.common.architecture.popup.InternalPopupEffectManager
+import com.linkit.company.core.common.architecture.popup.PopupEffectManager
+import com.linkit.company.core.common.architecture.popup.ToastExposureStatusType
 import kotlinx.coroutines.delay
 
 class HomeViewModel(
     savedStateHandle: SavedStateHandle,
-) : MVIViewModel<HomeIntent, HomeSideEffect, HomeUiState>(
-    savedStateHandle = savedStateHandle
-) {
+) : MVIViewModel<HomeIntent, HomeSideEffect, HomeUiState>(savedStateHandle = savedStateHandle),
+    PopupEffectManager by InternalPopupEffectManager() {
     init {
         updateLoading()
     }
@@ -27,5 +29,14 @@ class HomeViewModel(
         reduce { copy(isLoading = true) }
         delay(3000L)
         reduce { copy(isLoading = false) }
+        showToastPopup(
+            message = "Toast Popup",
+            toastExposureType = ToastExposureStatusType.DEFAULT,
+        )
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        closePopupEffect()
     }
 }
