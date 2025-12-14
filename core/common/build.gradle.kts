@@ -9,6 +9,8 @@ android {
 kotlin {
     sourceSets {
         commonMain.dependencies {
+            implementation(libs.androidx.appcompat)
+            implementation(libs.androidx.activity.compose)
         }
     }
 }

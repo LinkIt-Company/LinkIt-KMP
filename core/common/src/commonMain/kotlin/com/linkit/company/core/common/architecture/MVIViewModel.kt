@@ -3,60 +3,49 @@ package com.linkit.company.core.common.architecture
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.linkit.company.core.common.architecture.coroutine.CoroutineLauncherImpl
 import com.linkit.company.core.common.architecture.intent.Intent
 import com.linkit.company.core.common.architecture.sideeffect.SideEffect
+import com.linkit.company.core.common.architecture.sideeffect.SideEffectManagerImpl
 import com.linkit.company.core.common.architecture.state.UiState
-import kotlinx.coroutines.CoroutineExceptionHandler
+import com.linkit.company.core.common.architecture.state.UiStateManagerImpl
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.channels.BufferOverflow
-import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.receiveAsFlow
-import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
 
 abstract class MVIViewModel<I : Intent, SE : SideEffect, S : UiState>(
     savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
-    private val initialState: S by lazy { createInitialState(savedStateHandle) }
+    private val uiStateManager by lazy { UiStateManagerImpl<S>(createInitialState(savedStateHandle)) }
+    private val sideEffectManager by lazy { SideEffectManagerImpl<SE>() }
+    private val coroutineLauncher by lazy {
+        CoroutineLauncherImpl(
+            onException = { handleClientException(it) }
+        )
+    }
 
-    private val _uiState: MutableStateFlow<S> = MutableStateFlow(initialState)
-    val uiState: StateFlow<S> = _uiState.asStateFlow()
-
-    private val _sideEffect: Channel<SE> = Channel(onBufferOverflow = BufferOverflow.DROP_OLDEST)
-    val sideEffect: Flow<SE> = _sideEffect.receiveAsFlow()
+    val uiState: StateFlow<S> = uiStateManager.uiState
+    val sideEffect: Flow<SE> = sideEffectManager.sideEffect
 
     protected val currentState: S
-        get() = _uiState.value
-
-    protected val coroutineExceptionHandler: CoroutineExceptionHandler =
-        CoroutineExceptionHandler { _, throwable ->
-            handleClientException(throwable)
-        }
+        get() = uiStateManager.currentState
 
     protected abstract fun createInitialState(savedStateHandle: SavedStateHandle): S
     protected abstract fun handleIntent(intent: I)
 
     protected suspend fun postSideEffect(sideEffect: SE) {
-        _sideEffect.send(sideEffect)
+        sideEffectManager.postSideEffect(sideEffect)
     }
 
-    protected fun reduce(action: S.() -> S) {
-        _uiState.update { currentState.action() }
-    }
+    protected fun reduce(action: S.() -> S) = uiStateManager.reduce(action)
 
-    protected inline fun launch(
+    protected fun launch(
         context: CoroutineContext = EmptyCoroutineContext,
-        crossinline action: suspend CoroutineScope.() -> Unit,
-    ): Job = viewModelScope.launch(context = context + coroutineExceptionHandler) {
-        action()
-    }
+        action: suspend CoroutineScope.() -> Unit,
+    ): Job = coroutineLauncher.launch(viewModelScope, context, action)
 
     fun intent(intent: I): Job = launch {
         handleIntent(intent)
@@ -68,6 +57,6 @@ abstract class MVIViewModel<I : Intent, SE : SideEffect, S : UiState>(
 
     override fun onCleared() {
         super.onCleared()
-        _sideEffect.close()
+        sideEffectManager.closeSideEffect()
     }
 }
