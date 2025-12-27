@@ -34,6 +34,7 @@ include(":app")
 // Core modules
 include(":core:common")
 include(":core:designsystem")
+include(":core:navigation")
 
 // Domain
 include(":domain")
@@ -48,3 +49,4 @@ include(":feature:onboarding")
 include(":feature:save")
 include(":feature:share")
 include(":feature:storage")
+
