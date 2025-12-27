@@ -1,6 +1,8 @@
 package com.linkit.company.core.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.saveable.rememberSerializable
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.runtime.toMutableStateList
@@ -13,11 +15,15 @@ import androidx.navigation3.scene.SinglePaneSceneStrategy
 import androidx.navigation3.ui.NavDisplay
 import androidx.savedstate.compose.serialization.serializers.SnapshotStateListSerializer
 
+val LocalLinkItBackStack = compositionLocalOf<SnapshotStateList<LinkItRoute>> {
+    error("LocalLinkItBackStack not provided")
+}
+
 private val startDestination = LinkItRoute.Home
 
 @Composable
 fun rememberLinkItBackStack(): SnapshotStateList<LinkItRoute> {
-    return rememberSerializable(serializer = SnapshotStateListSerializer<LinkItRoute>()) {
+    return rememberSerializable(serializer = SnapshotStateListSerializer(LinkItRoute.serializer())) {
         listOf(startDestination).toMutableStateList()
     }
 }
@@ -32,13 +38,15 @@ fun LinkItNavDisplay(
 ) {
     val backStack = rememberLinkItBackStack()
 
-    NavDisplay(
-        backStack = backStack,
-        modifier = modifier,
-        contentAlignment = contentAlignment,
-        onBack = { backStack.removeLastOrNull() },
-        entryDecorators = entryDecorators,
-        sceneStrategy = sceneStrategy,
-        entryProvider = linkItEntryProvider,
-    )
+    CompositionLocalProvider(LocalLinkItBackStack provides backStack) {
+        NavDisplay(
+            backStack = backStack,
+            modifier = modifier,
+            contentAlignment = contentAlignment,
+            onBack = { backStack.removeLastOrNull() },
+            entryDecorators = entryDecorators,
+            sceneStrategy = sceneStrategy,
+            entryProvider = linkItEntryProvider,
+        )
+    }
 }

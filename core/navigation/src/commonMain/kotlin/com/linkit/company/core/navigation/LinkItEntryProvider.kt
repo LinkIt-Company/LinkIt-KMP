@@ -8,28 +8,54 @@ import com.linkit.company.feature.save.SaveScreen
 import com.linkit.company.feature.share.ShareScreen
 import com.linkit.company.feature.storage.StorageScreen
 
-internal val linkItEntryProvider = entryProvider {
+internal val linkItEntryProvider = entryProvider<LinkItRoute> {
     entry(LinkItRoute.Home) { _ ->
-        HomeScreen()
+        val backStack = LocalLinkItBackStack.current
+        HomeScreen(
+            onNavigateToOnboarding = { backStack.add(LinkItRoute.Onboarding) },
+            onNavigateToSave = { backStack.add(LinkItRoute.Save) },
+            onNavigateToShare = { backStack.add(LinkItRoute.Share) },
+            onNavigateToStorage = { backStack.add(LinkItRoute.Storage) },
+            onNavigateToClassification = { backStack.add(LinkItRoute.Classification) },
+        )
     }
 
     entry(LinkItRoute.Onboarding) { _ ->
-        OnboardingScreen()
+        val backStack = LocalLinkItBackStack.current
+        OnboardingScreen(
+            onNavigateToHome = { 
+                backStack.clear()
+                backStack.add(LinkItRoute.Home)
+            },
+            onBack = { backStack.removeLastOrNull() },
+        )
     }
 
     entry(LinkItRoute.Save) { _ ->
-        SaveScreen()
+        val backStack = LocalLinkItBackStack.current
+        SaveScreen(
+            onBack = { backStack.removeLastOrNull() },
+        )
     }
 
     entry(LinkItRoute.Share) { _ ->
-        ShareScreen()
+        val backStack = LocalLinkItBackStack.current
+        ShareScreen(
+            onBack = { backStack.removeLastOrNull() },
+        )
     }
 
     entry(LinkItRoute.Storage) { _ ->
-        StorageScreen()
+        val backStack = LocalLinkItBackStack.current
+        StorageScreen(
+            onBack = { backStack.removeLastOrNull() },
+        )
     }
 
     entry(LinkItRoute.Classification) { _ ->
-        ClassificationScreen()
+        val backStack = LocalLinkItBackStack.current
+        ClassificationScreen(
+            onBack = { backStack.removeLastOrNull() },
+        )
     }
 }
