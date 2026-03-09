@@ -43,10 +43,9 @@ include(":domain")
 include(":data")
 
 // Features
+include(":feature:intro")
 include(":feature:home")
-include(":feature:classification")
-include(":feature:onboarding")
-include(":feature:save")
-include(":feature:share")
+include(":feature:schedule")
 include(":feature:storage")
+include(":feature:explore")
 

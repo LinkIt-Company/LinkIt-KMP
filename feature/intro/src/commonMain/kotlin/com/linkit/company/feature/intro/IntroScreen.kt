@@ -1,4 +1,4 @@
-package com.linkit.company.feature.home
+package com.linkit.company.feature.intro
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -17,11 +18,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun HomeScreen(
-    onNavigateToIntro: () -> Unit = {},
-    onNavigateToSchedule: () -> Unit = {},
-    onNavigateToStorage: () -> Unit = {},
-    onNavigateToExplore: () -> Unit = {},
+fun IntroScreen(
+    onNavigateToHome: () -> Unit = {},
+    onBack: () -> Unit = {},
 ) {
     Scaffold { paddingValues ->
         Column(
@@ -33,44 +32,26 @@ fun HomeScreen(
             verticalArrangement = Arrangement.Center
         ) {
             Text(
-                text = "Home Screen",
+                text = "Intro Screen",
                 style = MaterialTheme.typography.headlineMedium
             )
 
             Spacer(modifier = Modifier.height(32.dp))
 
             Button(
-                onClick = onNavigateToIntro,
+                onClick = onNavigateToHome,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text("Go to Intro")
+                Text("Go to Home")
             }
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            Button(
-                onClick = onNavigateToSchedule,
+            OutlinedButton(
+                onClick = onBack,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text("Go to Schedule")
-            }
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            Button(
-                onClick = onNavigateToStorage,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text("Go to Storage")
-            }
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            Button(
-                onClick = onNavigateToExplore,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text("Go to Explore")
+                Text("Back")
             }
         }
     }
