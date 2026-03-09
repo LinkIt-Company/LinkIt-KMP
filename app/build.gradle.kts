@@ -19,11 +19,11 @@ kotlin {
             implementation(projects.core.common)
             implementation(projects.core.designsystem)
             implementation(projects.core.navigation)
-            
+
             // Domain & Data
             implementation(projects.domain)
             implementation(projects.data)
-            
+
             // Feature modules
             implementation(projects.feature.home)
             implementation(projects.feature.classification)
@@ -31,6 +31,9 @@ kotlin {
             implementation(projects.feature.save)
             implementation(projects.feature.share)
             implementation(projects.feature.storage)
+
+            // Navigation3
+            implementation(libs.bundles.jetbrainsNavigation3)
         }
     }
 }
