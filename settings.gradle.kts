@@ -45,6 +45,7 @@ include(":data")
 // Features
 include(":feature:intro")
 include(":feature:home")
+include(":feature:map")
 include(":feature:schedule")
 include(":feature:storage")
 include(":feature:explore")
