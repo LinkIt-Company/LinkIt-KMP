@@ -1,6 +1,6 @@
 package com.linkit.company.buildlogic
 
-import com.android.build.api.dsl.ApplicationExtension
+import com.android.build.gradle.LibraryExtension
 import org.gradle.api.JavaVersion
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -12,14 +12,14 @@ import org.jetbrains.compose.ComposeExtension
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 
-class KmpApplicationConventionPlugin : Plugin<Project> {
+class KmpSharedConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
             val libs = extensions.getByType<VersionCatalogsExtension>().named("libs")
 
             with(pluginManager) {
                 apply("org.jetbrains.kotlin.multiplatform")
-                apply("com.android.application")
+                apply("com.android.library")
                 apply("org.jetbrains.compose")
                 apply("org.jetbrains.kotlin.plugin.compose")
                 apply("dev.zacsweers.metro")
@@ -66,24 +66,11 @@ class KmpApplicationConventionPlugin : Plugin<Project> {
                 }
             }
 
-            extensions.configure<ApplicationExtension> {
+            extensions.configure<LibraryExtension> {
                 compileSdk = libs.findVersion("android.compileSdk").get().toString().toInt()
 
                 defaultConfig {
                     minSdk = libs.findVersion("android.minSdk").get().toString().toInt()
-                    targetSdk = libs.findVersion("android.targetSdk").get().toString().toInt()
-                }
-
-                packaging {
-                    resources {
-                        excludes += "/META-INF/{AL2.0,LGPL2.1}"
-                    }
-                }
-
-                buildTypes {
-                    getByName("release") {
-                        isMinifyEnabled = false
-                    }
                 }
 
                 compileOptions {

@@ -1,0 +1,26 @@
+plugins {
+    id("android.application.convention")
+    id("org.jetbrains.kotlin.android")
+    id("org.jetbrains.kotlin.plugin.compose")
+}
+
+android {
+    namespace = "com.linkit.company.android"
+
+    defaultConfig {
+        applicationId = "com.linkit.company"
+        versionCode = libs.versions.app.versionCode.get().toInt()
+        versionName = libs.versions.app.versionName.get()
+    }
+}
+
+kotlin {
+    compilerOptions {
+        jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11)
+    }
+}
+
+dependencies {
+    implementation(project(":app-shared"))
+    implementation(libs.androidx.activity.compose)
+}

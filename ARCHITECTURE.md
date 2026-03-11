@@ -6,7 +6,9 @@
 
 ```
 LinkIt-KMP/
-├── app/                          # 애플리케이션 모듈 (진입점)
+├── app-shared/                   # 공유 KMP 모듈 (공통 UI/로직)
+├── app-android/                  # Android 애플리케이션 모듈 (진입점)
+├── app-ios/                      # iOS 애플리케이션 모듈 (Xcode)
 ├── core/                         # 공통 모듈
 │   ├── common/                   # 공통 유틸리티, 확장 함수, 상수
 │   └── designsystem/             # 디자인 시스템 (테마, 컬러, 타이포그래피)
@@ -33,7 +35,8 @@ LinkIt-KMP/
 ### 허용되는 의존성
 
 ```
-app → feature-*, domain, data, core-*
+app-shared → feature-*, domain, data, core-*
+app-android → app-shared
 feature-* → domain, core-*
 domain → core-*
 data → domain, core-*
@@ -50,9 +53,19 @@ core-designsystem → core-common
 ## 📦 모듈 설명
 
 ### App 모듈
-- 애플리케이션 진입점
-- 모든 모듈의 의존성 통합 (Hilt DI 설정)
-- Navigation 구성
+
+#### app-shared
+- 공통 UI 루트 및 앱 조립
+- 모든 shared 모듈 의존성 통합
+- iOS Framework 산출물 제공
+
+#### app-android
+- Android 런처 모듈(애플리케이션 진입점)
+- `app-shared` UI/로직 실행
+
+#### app-ios
+- iOS 런처 모듈(Xcode 프로젝트)
+- `app-shared`에서 생성한 Framework 실행
 
 ### Core 모듈
 
@@ -91,7 +104,8 @@ core-designsystem → core-common
 
 프로젝트는 Gradle Convention Plugins를 사용하여 빌드 로직을 공유합니다:
 
-- `kmp.application.convention`: 애플리케이션 모듈용
+- `kmp.shared.convention`: 공유 KMP 앱 모듈(`app-shared`)용
+- `android.application.convention`: Android 앱 모듈(`app-android`)용
 - `kmp.library.convention`: 라이브러리 모듈용
 - `kmp.feature.convention`: 피쳐 모듈용 (Compose 포함)
 - `kmp.core.convention`: Core 모듈용
@@ -112,7 +126,7 @@ core-designsystem → core-common
 1. `feature/` 디렉토리에 새 모듈 생성
 2. `settings.gradle.kts`에 모듈 추가
 3. `build.gradle.kts`에 `kmp.feature.convention` 플러그인 적용
-4. `app/build.gradle.kts`에 의존성 추가
+4. `app-shared/build.gradle.kts`에 의존성 추가
 
 ### 새로운 UseCase 추가하기
 
