@@ -13,6 +13,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalContext
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -34,8 +35,6 @@ import com.linkit.company.feature.home.sample.HomeViewModel
 fun HomeScreen() {
     val homeViewModel by lazy { HomeViewModel(SavedStateHandle()) }
     val uiState by homeViewModel.uiState.collectAsStateWithLifecycle()
-
-
     LaunchedEffect(key1 = Unit) {
         homeViewModel.sideEffect.collect {
             when (it) {
@@ -48,6 +47,7 @@ fun HomeScreen() {
         homeViewModel.popupEffect.collect { exposureType ->
             when (exposureType) {
                 is PopupExposureType.Toast -> {
+
                 }
 
                 is PopupExposureType.Dialog -> {
