@@ -10,7 +10,7 @@ internal class SideEffectEmitter<SE : SideEffect> {
     private val _sideEffect: Channel<SE> = Channel(onBufferOverflow = BufferOverflow.DROP_OLDEST)
     val sideEffect: Flow<SE> = _sideEffect.receiveAsFlow()
 
-    suspend fun emit(sideEffect: SE) {
-        _sideEffect.send(sideEffect)
+    fun emit(sideEffect: SE) {
+        _sideEffect.trySend(sideEffect)
     }
 }
