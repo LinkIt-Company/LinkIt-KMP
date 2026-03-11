@@ -42,6 +42,7 @@ include(":domain")
 include(":data")
 
 // Features
+include(":feature:intro")
 include(":feature:home")
 include(":feature:classification")
 include(":feature:onboarding")

@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:api.github.com)",
+      "Bash(git remote get-url origin)",
+      "Bash(find /Users/yuhohyeon/Desktop/project/LinkIt-KMP/feature/*/src/commonMain -name \"*.kt\" -type f)",
+      "Bash(git -C /Users/yuhohyeon/Desktop/project/LinkIt-KMP log --oneline -15)",
+      "Bash(git -C /Users/yuhohyeon/Desktop/project/LinkIt-KMP branch -a)",
+      "Bash(./gradlew :feature:intro:tasks --all)",
+      "Bash(./gradlew :feature:intro:compileDebugKotlinAndroid)"
+    ],
+    "additionalDirectories": [
+      "/Users/yuhohyeon/Desktop/project/LinkIt-KMP/.claude"
+    ]
+  }
+}
