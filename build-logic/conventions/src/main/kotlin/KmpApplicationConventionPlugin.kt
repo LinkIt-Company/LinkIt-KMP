@@ -16,14 +16,15 @@ class KmpApplicationConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
             val libs = extensions.getByType<VersionCatalogsExtension>().named("libs")
-            
+
             with(pluginManager) {
                 apply("org.jetbrains.kotlin.multiplatform")
                 apply("com.android.application")
                 apply("org.jetbrains.compose")
                 apply("org.jetbrains.kotlin.plugin.compose")
+                apply("dev.zacsweers.metro")
             }
-            
+
             val compose = extensions.getByType<ComposeExtension>()
 
             extensions.configure<KotlinMultiplatformExtension> {
@@ -54,7 +55,9 @@ class KmpApplicationConventionPlugin : Plugin<Project> {
                         implementation(compose.dependencies.ui)
                         implementation(compose.dependencies.components.resources)
                         implementation(compose.dependencies.components.uiToolingPreview)
-                        implementation(libs.findLibrary("androidx.lifecycle.viewmodelCompose").get())
+                        implementation(
+                            libs.findLibrary("androidx.lifecycle.viewmodelCompose").get()
+                        )
                         implementation(libs.findLibrary("androidx.lifecycle.runtimeCompose").get())
                     }
                     commonTest.dependencies {

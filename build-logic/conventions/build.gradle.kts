@@ -29,4 +29,5 @@ dependencies {
     compileOnly(libs.android.gradlePlugin)
     compileOnly(libs.kotlin.gradlePlugin)
     compileOnly(libs.compose.gradlePlugin)
+    compileOnly("dev.zacsweers.metro:dev.zacsweers.metro.gradle.plugin:${libs.versions.metro.get()}")
 }
