@@ -29,7 +29,8 @@ dependencyResolutionManagement {
     }
 }
 
-include(":app")
+include(":app-shared")
+include(":app-android")
 
 // Core modules
 include(":core:common")

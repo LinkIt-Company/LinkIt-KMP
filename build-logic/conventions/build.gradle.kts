@@ -6,9 +6,9 @@ group = "com.linkit.company.buildlogic"
 
 gradlePlugin {
     plugins {
-        register("kmpApplicationConvention") {
-            id = "kmp.application.convention"
-            implementationClass = "com.linkit.company.buildlogic.KmpApplicationConventionPlugin"
+        register("kmpSharedConvention") {
+            id = "kmp.shared.convention"
+            implementationClass = "com.linkit.company.buildlogic.KmpSharedConventionPlugin"
         }
         register("kmpLibraryConvention") {
             id = "kmp.library.convention"
@@ -21,6 +21,10 @@ gradlePlugin {
         register("kmpCoreConvention") {
             id = "kmp.core.convention"
             implementationClass = "com.linkit.company.buildlogic.KmpCoreConventionPlugin"
+        }
+        register("androidApplicationConvention") {
+            id = "android.application.convention"
+            implementationClass = "com.linkit.company.buildlogic.AndroidApplicationConventionPlugin"
         }
     }
 }

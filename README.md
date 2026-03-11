@@ -142,8 +142,8 @@ graph TB
 
 ## Project Structure
 
-* [/app](./app/src) is the application module that integrates all features.
-  - [commonMain](./app/src/commonMain/kotlin) is for code that's common for all targets.
+* [/app-shared](./app-shared/src) is the shared module that integrates all features.
+  - [commonMain](./app-shared/src/commonMain/kotlin) is for code that's common for all targets.
   - Platform-specific folders contain platform-specific implementations.
 
 * [/core](./core) contains shared modules used across the entire project.
@@ -154,7 +154,7 @@ graph TB
 
 * [/feature](./feature) contains feature modules with UI and ViewModels.
 
-* [/iosApp](./iosApp/iosApp) contains iOS application entry point.
+* [/app-ios](./app-ios/app-ios) contains iOS application entry point.
 
 ### Build and Run Android Application
 
@@ -162,17 +162,17 @@ To build and run the development version of the Android app, use the run configu
 in your IDE's toolbar or build it directly from the terminal:
 - on macOS/Linux
   ```shell
-  ./gradlew :app:assembleDebug
+  ./gradlew :app-android:assembleDebug
   ```
 - on Windows
   ```shell
-  .\gradlew.bat :app:assembleDebug
+  .\gradlew.bat :app-android:assembleDebug
   ```
 
 ### Build and Run iOS Application
 
 To build and run the development version of the iOS app, use the run configuration from the run widget
-in your IDE's toolbar or open the [/iosApp](./iosApp) directory in Xcode and run it from there.
+in your IDE's toolbar or open the [/app-ios](./app-ios) directory in Xcode and run it from there.
 
 ---
 
