@@ -24,7 +24,7 @@ class MviContainer<I : Intent, SE : SideEffect, S : UiState>(
             uiStateHolder.reduce(action)
         }
 
-        override suspend fun postSideEffect(sideEffect: SE) {
+        override fun postSideEffect(sideEffect: SE) {
             sideEffectEmitter.emit(sideEffect)
         }
     }
@@ -37,5 +37,5 @@ class MviContainer<I : Intent, SE : SideEffect, S : UiState>(
 interface MviContext<S : UiState, SE : SideEffect> {
     val currentState: S
     fun reduce(action: S.() -> S)
-    suspend fun postSideEffect(sideEffect: SE)
+    fun postSideEffect(sideEffect: SE)
 }
