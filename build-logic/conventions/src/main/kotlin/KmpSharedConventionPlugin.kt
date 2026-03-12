@@ -28,6 +28,10 @@ class KmpSharedConventionPlugin : Plugin<Project> {
             val compose = extensions.getByType<ComposeExtension>()
 
             extensions.configure<KotlinMultiplatformExtension> {
+                compilerOptions {
+                    freeCompilerArgs.add("-Xcontext-parameters")
+                }
+
                 androidTarget {
                     compilerOptions {
                         jvmTarget.set(JvmTarget.JVM_11)
