@@ -13,4 +13,8 @@ internal class SideEffectEmitter<SE : SideEffect> {
     fun emit(sideEffect: SE) {
         _sideEffect.trySend(sideEffect)
     }
+
+    fun close() {
+        _sideEffect.close()
+    }
 }

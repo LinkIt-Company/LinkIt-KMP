@@ -58,6 +58,7 @@ class HomeViewModel(savedStateHandle: SavedStateHandle) : ViewModel(),
 
     override fun onCleared() {
         closePopupEffect()
+        container.close()
         super.onCleared()
     }
 }

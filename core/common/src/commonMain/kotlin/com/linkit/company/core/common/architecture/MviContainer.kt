@@ -32,6 +32,10 @@ class MviContainer<I : Intent, SE : SideEffect, S : UiState>(
     fun intent(intent: I) {
         onIntent(mviContext, intent)
     }
+
+    fun close() {
+        sideEffectEmitter.close()
+    }
 }
 
 interface MviContext<S : UiState, SE : SideEffect> {
