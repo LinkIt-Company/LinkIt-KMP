@@ -2,6 +2,7 @@ plugins {
     id("android.application.convention")
     id("org.jetbrains.kotlin.android")
     id("org.jetbrains.kotlin.plugin.compose")
+    id("dev.zacsweers.metro")
 }
 
 android {

@@ -4,10 +4,9 @@ import androidx.compose.runtime.Composable
 import com.linkit.company.core.designsystem.theme.LinkItTheme
 import com.linkit.company.core.navigation.LinkItNavDisplay
 import com.linkit.company.navigation.linkItEntryProvider
-import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
-@Preview
+context(appGraph: AppGraph)
 fun LinkItApp() {
     LinkItTheme {
         LinkItNavDisplay(
