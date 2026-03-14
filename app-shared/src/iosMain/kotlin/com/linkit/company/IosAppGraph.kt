@@ -2,8 +2,11 @@ package com.linkit.company
 
 import com.linkit.company.data.DataScope
 import com.linkit.company.data.core.defaultKtorConfig
+import com.linkit.company.data.datasource.sample.SampleDataSource
+import com.linkit.company.data.datasource.sample.SampleDataSourceImpl
 import de.jensklingenberg.ktorfit.Ktorfit
 import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.Binds
 import dev.zacsweers.metro.DependencyGraph
 import dev.zacsweers.metro.Provides
 import dev.zacsweers.metro.createGraphFactory
@@ -25,6 +28,9 @@ import kotlinx.serialization.json.Json
     // isExtendable = true
 )
 interface IosAppGraph : AppGraph {
+
+    @Binds
+    val SampleDataSourceImpl.bind: SampleDataSource
 
     @Provides
     fun provideBaseUrl(): String = ""

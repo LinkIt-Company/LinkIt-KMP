@@ -1,7 +1,7 @@
 package com.linkit.company
 
 import android.content.Context
-import com.linkit.company.data.di.DataScope
+import com.linkit.company.data.DataScope
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.DependencyGraph
 import dev.zacsweers.metro.Provides
