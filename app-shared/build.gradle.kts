@@ -29,6 +29,8 @@ kotlin {
 
             // Navigation3
             implementation(libs.bundles.jetbrainsNavigation3)
+
+            implementation(libs.kotlinxSerializationJson)
         }
     }
 }

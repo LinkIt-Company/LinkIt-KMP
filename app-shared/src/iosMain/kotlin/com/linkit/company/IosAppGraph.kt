@@ -1,9 +1,15 @@
 package com.linkit.company
 
 import com.linkit.company.data.DataScope
+import com.linkit.company.data.core.defaultKtorConfig
+import de.jensklingenberg.ktorfit.Ktorfit
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.DependencyGraph
+import dev.zacsweers.metro.Provides
 import dev.zacsweers.metro.createGraphFactory
+import io.ktor.client.HttpClient
+import io.ktor.client.engine.darwin.Darwin
+import kotlinx.serialization.json.Json
 
 /**
  * The iOS dependency graph cannot currently be resolved by the compiler plugin.
@@ -19,6 +25,27 @@ import dev.zacsweers.metro.createGraphFactory
     // isExtendable = true
 )
 interface IosAppGraph : AppGraph {
+
+    @Provides
+    fun provideBaseUrl(): String = ""
+
+    @Provides
+    fun provideHttpClient(json: Json): HttpClient {
+        return HttpClient(Darwin) {
+            defaultKtorConfig(json)
+        }
+    }
+
+    @Provides
+    fun provideKtorfit(
+        httpClient: HttpClient,
+        baseUrl: String,
+    ): Ktorfit {
+        return Ktorfit.Builder()
+            .baseUrl(baseUrl)
+            .httpClient(httpClient)
+            .build()
+    }
 
     @DependencyGraph.Factory
     fun interface Factory {
