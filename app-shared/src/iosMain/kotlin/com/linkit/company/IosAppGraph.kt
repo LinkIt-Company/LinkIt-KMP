@@ -1,6 +1,6 @@
 package com.linkit.company
 
-import com.linkit.company.data.di.DataScope
+import com.linkit.company.data.DataScope
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.DependencyGraph
 import dev.zacsweers.metro.createGraphFactory
@@ -18,15 +18,15 @@ import dev.zacsweers.metro.createGraphFactory
     additionalScopes = [DataScope::class],
     // isExtendable = true
 )
-interface IOSAppGraph : AppGraph {
+interface IosAppGraph : AppGraph {
 
     @DependencyGraph.Factory
     fun interface Factory {
         fun createIosAppGraph(
-        ): IOSAppGraph
+        ): IosAppGraph
     }
 }
 
-fun createIOSAppGraph(): IOSAppGraph {
-    return createGraphFactory<IOSAppGraph.Factory>().createIosAppGraph()
+fun createIosAppGraph(): IosAppGraph {
+    return createGraphFactory<IosAppGraph.Factory>().createIosAppGraph()
 }
