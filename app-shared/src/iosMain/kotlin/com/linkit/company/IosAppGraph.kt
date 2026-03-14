@@ -4,6 +4,8 @@ import com.linkit.company.data.DataScope
 import com.linkit.company.data.core.defaultKtorConfig
 import com.linkit.company.data.datasource.sample.SampleDataSource
 import com.linkit.company.data.datasource.sample.SampleDataSourceImpl
+import com.linkit.company.data.repository.SampleRepositoryImpl
+import com.linkit.company.domain.repository.SampleRepository
 import de.jensklingenberg.ktorfit.Ktorfit
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Binds
@@ -31,6 +33,9 @@ interface IosAppGraph : AppGraph {
 
     @Binds
     val SampleDataSourceImpl.bind: SampleDataSource
+
+    @Binds
+    val SampleRepositoryImpl.bind: SampleRepository
 
     @Provides
     fun provideBaseUrl(): String = ""
