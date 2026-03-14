@@ -1,5 +1,6 @@
 plugins {
     id("kmp.library.convention")
+    alias(libs.plugins.kotlinxSerialization)
 }
 
 android {
@@ -11,6 +12,16 @@ kotlin {
         commonMain.dependencies {
             implementation(projects.core.common)
             implementation(projects.domain)
+
+            implementation(libs.kotlinxSerializationJson)
+            implementation(libs.ktorfitLib)
+            implementation(libs.ktorKotlinxSerializationJson)
+            implementation(libs.ktorClientContentNegotiation)
+        }
+
+
+        androidMain.dependencies {
+            implementation(libs.ktorClientOkhttp)
         }
     }
 }
