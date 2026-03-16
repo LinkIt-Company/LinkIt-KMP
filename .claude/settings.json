@@ -7,7 +7,9 @@
       "Bash(npm list:*)",
       "Bash(git status:*)",
       "Bash(git -C:*)",
-      "Bash(gh pr:*)"
+      "Bash(gh pr:*)",
+      "Bash(find /Users/yuhohyeon/Desktop/project/LinkIt-KMP/core -type f -name *.kt)",
+      "Bash(find /Users/yuhohyeon/Desktop/project/LinkIt-KMP/app -type f -name *.kt)"
     ],
     "additionalDirectories": [
       "/Users/yuhohyeon/.claude",
