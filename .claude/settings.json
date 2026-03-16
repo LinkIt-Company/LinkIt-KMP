@@ -4,7 +4,6 @@
       "Bash(git checkout:*)",
       "Bash(git add:*)",
       "Read(//Users/yuhohyeon/.claude/**)",
-      "Bash(npx @anthropic-ai/figma-mcp --help)",
       "Bash(npm list:*)",
       "Bash(git status:*)",
       "Bash(git -C:*)"
