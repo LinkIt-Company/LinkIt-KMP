@@ -20,3 +20,4 @@ node_modules/
 
 # Claude Code
 .claude/.mcp.json
+.claude/settings.json
