@@ -6,7 +6,8 @@
       "Read(//Users/yuhohyeon/.claude/**)",
       "Bash(npm list:*)",
       "Bash(git status:*)",
-      "Bash(git -C:*)"
+      "Bash(git -C:*)",
+      "Bash(gh pr:*)"
     ],
     "additionalDirectories": [
       "/Users/yuhohyeon/.claude",
