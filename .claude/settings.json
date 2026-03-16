@@ -10,7 +10,8 @@
       "Bash(git -C:*)"
     ],
     "additionalDirectories": [
-      "/Users/yuhohyeon/.claude"
+      "/Users/yuhohyeon/.claude",
+      "/Users/yuhohyeon/Desktop/project/LinkIt-KMP/.claude/commands"
     ]
   }
 }
