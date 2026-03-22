@@ -18,18 +18,22 @@ kotlin {
             // Core modules
             implementation(projects.core.common)
             implementation(projects.core.designsystem)
-            
+            implementation(projects.core.navigation)
+
             // Domain & Data
             implementation(projects.domain)
             implementation(projects.data)
-            
+
             // Feature modules
+            implementation(projects.feature.intro)
             implementation(projects.feature.home)
-            implementation(projects.feature.classification)
-            implementation(projects.feature.onboarding)
-            implementation(projects.feature.save)
-            implementation(projects.feature.share)
+            implementation(projects.feature.map)
+            implementation(projects.feature.schedule)
             implementation(projects.feature.storage)
+            implementation(projects.feature.explore)
+
+            // Navigation3
+            implementation(libs.bundles.jetbrainsNavigation3)
         }
     }
 }
