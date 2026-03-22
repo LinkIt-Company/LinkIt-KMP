@@ -1,21 +1,18 @@
 ### What is this PR (Required)
-- **Issue Number** : closes #ISSUE_NUMBER
-- **Figma** (Optional) :
+- **Issue Number** : close #ISSUE_NUMBER
+- **Figma :**
 - 기타 관련 문서 :
 
 ### Changes (Required)
--
+- none
 
 ### Review Point (Required)
--
+- none
 
-### Test Plan (Required)
--
-
-### Screenshot (Optional)
+### Screenshot
 | 기능 | 스크린샷 |
 | --- | --- |
 | GIF | <img src="" width="300" /> |
 
-### 관련 Reference 자료 (Optional)
+### 관련 Reference 자료
 -
