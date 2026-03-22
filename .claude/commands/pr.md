@@ -4,9 +4,10 @@
 
 1. **변경사항 파악**: 아래 명령어들을 병렬로 실행하여 현재 상태를 파악한다.
    - `git status` — 변경/추가된 파일 확인
-   - `git log main..HEAD --oneline` — 현재 브랜치의 커밋 목록 확인
-   - `git diff main...HEAD --stat` — main 대비 변경된 파일 통계 확인
-   - `git diff main...HEAD` — 실제 변경 내용 확인
+   - 상위 브랜치(base)를 결정한다: `develop` 브랜치이면 `main`, 그 외 작업 브랜치이면 `develop`
+   - `git log <base>..HEAD --oneline` — 현재 브랜치의 커밋 목록 확인
+   - `git diff <base>...HEAD --stat` — base 대비 변경된 파일 통계 확인
+   - `git diff <base>...HEAD` — 실제 변경 내용 확인
    - `git branch --show-current` — 현재 브랜치명 확인
 
 2. **PR 템플릿 읽기**: `.github/PULL_REQUEST_TEMPLATE.md` 파일을 읽어서 PR 본문 형식을 파악한다.
@@ -27,7 +28,7 @@
 6. **PR 생성**: 사용자가 승인하면 아래 단계를 진행한다. 수정 요청이 오면 반영 후 다시 확인을 요청한다.
    - 커밋되지 않은 변경사항이 있으면 사용자에게 알리고 커밋 여부를 확인한다.
    - `git push -u origin <branch>` 로 리모트에 푸시한다.
-   - `gh pr create --title "제목" --body "본문" --base main` 으로 PR을 생성한다.
+   - `gh pr create --title "제목" --body "본문" --base <base>` 으로 PR을 생성한다.
    - 생성된 PR URL을 사용자에게 알려준다.
 
 7. **코드 리뷰 코멘트 작성**: PR 생성 후, diff를 다시 분석하여 핵심 변경 포인트나 보충 설명이 필요한 코드에 Review Comment를 남긴다.
@@ -47,7 +48,7 @@
 - PR 본문은 한국어로 작성한다.
 - Optional 섹션은 해당 내용이 없으면 과감히 제거한다.
 - PR 본문은 HEREDOC을 사용하여 전달한다.
-- base 브랜치는 기본적으로 `main`을 사용한다.
+- base 브랜치는 브랜치 계층에 따라 결정한다: `develop` → `main`, 작업 브랜치 → `develop`.
 - 사용자가 최종 승인하기 전까지 절대 push나 PR 생성을 하지 않는다.
 
 ## Mermaid 다이어그램 가이드
