@@ -1,4 +1,4 @@
-package com.linkit.company.feature.storage
+package com.linkit.company.feature.explore
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -12,7 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun StorageScreen() {
+fun ExploreScreen() {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -21,7 +21,7 @@ fun StorageScreen() {
         verticalArrangement = Arrangement.Center
     ) {
         Text(
-            text = "Storage Screen",
+            text = "Explore Screen",
             style = MaterialTheme.typography.headlineMedium
         )
     }

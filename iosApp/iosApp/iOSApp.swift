@@ -2,9 +2,18 @@ import SwiftUI
 
 @main
 struct iOSApp: App {
+    @State private var showIntro = true
+
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            if showIntro {
+                IntroComposeView(onComplete: {
+                    showIntro = false
+                })
+                .ignoresSafeArea()
+            } else {
+                ContentView()
+            }
         }
     }
 }

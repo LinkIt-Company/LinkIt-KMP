@@ -35,6 +35,7 @@ include(":app")
 include(":core:common")
 include(":core:ui")
 include(":core:designsystem")
+include(":core:navigation")
 
 // Domain
 include(":domain")
@@ -43,9 +44,10 @@ include(":domain")
 include(":data")
 
 // Features
+include(":feature:intro")
 include(":feature:home")
-include(":feature:classification")
-include(":feature:onboarding")
-include(":feature:save")
-include(":feature:share")
+include(":feature:map")
+include(":feature:schedule")
 include(":feature:storage")
+include(":feature:explore")
+
