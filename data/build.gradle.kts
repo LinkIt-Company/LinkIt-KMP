@@ -1,6 +1,6 @@
 plugins {
     id("kmp.library.convention")
-    alias(libs.plugins.kotlinxSerialization)
+    alias(libs.plugins.kotlinSerialization)
 }
 
 android {

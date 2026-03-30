@@ -25,5 +25,6 @@ kotlin {
 
 dependencies {
     implementation(project(":app-shared"))
+    implementation(project(":feature:intro"))
     implementation(libs.androidx.activity.compose)
 }
