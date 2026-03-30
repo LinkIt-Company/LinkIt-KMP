@@ -14,5 +14,8 @@ kotlin {
             implementation(projects.core.designsystem)
             implementation(projects.domain)
         }
+        androidMain.dependencies {
+            implementation(libs.androidx.activity.compose)
+        }
     }
 }
