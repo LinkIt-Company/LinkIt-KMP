@@ -13,6 +13,11 @@ kotlin {
             implementation(projects.core.ui)
             implementation(projects.core.designsystem)
             implementation(projects.domain)
+
+            // 탭 모듈
+            implementation(projects.feature.map)
+            implementation(projects.feature.storage)
+            implementation(projects.feature.explore)
         }
     }
 }
