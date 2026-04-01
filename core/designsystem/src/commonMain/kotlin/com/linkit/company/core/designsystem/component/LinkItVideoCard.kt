@@ -56,7 +56,7 @@ fun LinkItVideoCard(
                         .align(Alignment.BottomEnd)
                         .padding(end = 8.dp, bottom = 8.dp)
                         .background(
-                            color = Color(0x1AEEEEEE),
+                            color = Color(0x66000000),
                             shape = LinkItShape.tag,
                         )
                         .clickable(onClick = onCopyLinkClick)

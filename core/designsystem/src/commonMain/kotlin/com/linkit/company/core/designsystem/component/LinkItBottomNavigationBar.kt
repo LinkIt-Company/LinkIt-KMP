@@ -1,5 +1,6 @@
 package com.linkit.company.core.designsystem.component
 
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
@@ -34,7 +35,7 @@ fun LinkItBottomNavigationBar(
     modifier: Modifier = Modifier,
 ) {
     NavigationBar(
-        modifier = modifier,
+        modifier = modifier.height(60.dp),
         containerColor = White,
         tonalElevation = 0.dp,
     ) {

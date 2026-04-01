@@ -1,5 +1,6 @@
 package com.linkit.company.core.designsystem.component
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -10,7 +11,6 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.linkit.company.core.designsystem.icon.LinkItIcons
-import com.linkit.company.core.designsystem.theme.G2
 import com.linkit.company.core.designsystem.theme.HeaderText
 import com.linkit.company.core.designsystem.theme.LinkItTextStyle
 import com.linkit.company.core.designsystem.theme.White
@@ -24,30 +24,32 @@ fun LinkItTopAppBar(
     onBackClick: () -> Unit = {},
     actions: @Composable RowScope.() -> Unit = {},
 ) {
-    TopAppBar(
-        title = {
-            Text(
-                text = title,
-                style = LinkItTextStyle.heading,
-                color = HeaderText,
-            )
-        },
-        modifier = modifier,
-        navigationIcon = {
-            if (showBackButton) {
-                IconButton(onClick = onBackClick) {
-                    Icon(
-                        imageVector = LinkItIcons.ArrowBack,
-                        contentDescription = "뒤로 가기",
-                    )
+    Column(modifier = modifier) {
+        TopAppBar(
+            title = {
+                Text(
+                    text = title,
+                    style = LinkItTextStyle.heading,
+                    color = HeaderText,
+                )
+            },
+            navigationIcon = {
+                if (showBackButton) {
+                    IconButton(onClick = onBackClick) {
+                        Icon(
+                            imageVector = LinkItIcons.ArrowBack,
+                            contentDescription = "뒤로 가기",
+                        )
+                    }
                 }
-            }
-        },
-        actions = actions,
-        colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = White,
-            navigationIconContentColor = HeaderText,
-            actionIconContentColor = HeaderText,
-        ),
-    )
+            },
+            actions = actions,
+            colors = TopAppBarDefaults.topAppBarColors(
+                containerColor = White,
+                navigationIconContentColor = HeaderText,
+                actionIconContentColor = HeaderText,
+            ),
+        )
+        LinkItDivider()
+    }
 }
