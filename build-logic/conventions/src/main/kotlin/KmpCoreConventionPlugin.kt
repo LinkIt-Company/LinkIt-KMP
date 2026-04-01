@@ -32,6 +32,10 @@ class KmpCoreConventionPlugin : Plugin<Project> {
                     }
                 }
             }
+
+            dependencies {
+                "debugImplementation"(compose.dependencies.uiTooling)
+            }
         }
     }
 }
