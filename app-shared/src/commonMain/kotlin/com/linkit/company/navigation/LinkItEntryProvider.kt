@@ -3,6 +3,7 @@ package com.linkit.company.navigation
 import androidx.navigation3.runtime.entryProvider
 import com.linkit.company.core.navigation.LinkItRoute
 import com.linkit.company.core.navigation.LocalLinkItNavigator
+import com.linkit.company.core.designsystem.showcase.DesignShowcaseScreen
 import com.linkit.company.feature.explore.ExploreScreen
 import com.linkit.company.feature.home.HomeScreen
 import com.linkit.company.feature.map.MapScreen
@@ -15,7 +16,10 @@ val linkItEntryProvider = entryProvider<LinkItRoute> {
         val navigator = LocalLinkItNavigator.current
         HomeScreen(
             mapContent = { onOpenSchedule ->
-                MapScreen(onOpenSchedule = onOpenSchedule)
+                MapScreen(
+                    onOpenSchedule = onOpenSchedule,
+                    onOpenDesignShowcase = { navigator.navigate(LinkItRoute.DesignShowcase) },
+                )
             },
             storageContent = { StorageScreen() },
             exploreContent = { ExploreScreen() },
@@ -34,6 +38,13 @@ val linkItEntryProvider = entryProvider<LinkItRoute> {
     entry(LinkItRoute.ScheduleEdit) { _ ->
         val navigator = LocalLinkItNavigator.current
         ScheduleEditScreen(
+            onBack = { navigator.popBack() },
+        )
+    }
+
+    entry(LinkItRoute.DesignShowcase) { _ ->
+        val navigator = LocalLinkItNavigator.current
+        DesignShowcaseScreen(
             onBack = { navigator.popBack() },
         )
     }

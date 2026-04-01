@@ -9,4 +9,7 @@ sealed interface LinkItRoute {
 
     @Serializable
     data object ScheduleEdit : LinkItRoute
+
+    @Serializable
+    data object DesignShowcase : LinkItRoute
 }
