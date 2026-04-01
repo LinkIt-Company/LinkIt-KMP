@@ -22,10 +22,7 @@ kotlin {
             // Feature modules
             implementation(projects.feature.intro)
             implementation(projects.feature.home)
-            implementation(projects.feature.map)
             implementation(projects.feature.schedule)
-            implementation(projects.feature.storage)
-            implementation(projects.feature.explore)
 
             // Navigation3
             implementation(libs.bundles.jetbrainsNavigation3)
