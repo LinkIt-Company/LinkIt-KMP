@@ -2,27 +2,45 @@ package com.linkit.company.core.designsystem.theme
 
 import androidx.compose.ui.graphics.Color
 
-// Primary colors
-val Primary = Color(0xFF6200EE)
-val PrimaryVariant = Color(0xFF3700B3)
-val Secondary = Color(0xFF03DAC6)
-val SecondaryVariant = Color(0xFF018786)
+// Grayscale
+val White = Color(0xFFFFFFFF)
+val G1 = Color(0xFFFAFAFB)
+val G2 = Color(0xFFF5F5F6)
+val G4 = Color(0xFFC0C5CC)
+val G6 = Color(0xFF707276)
+val G8 = Color(0xFF878E99)
+val G9 = Color(0xFF27292C)
+val Black = Color(0xFF222222)
+val HeadingBlack = Color(0xFF0F172A)
+val HeaderText = Color(0xFF3E3E3E)
 
-// Background colors
-val Background = Color(0xFFFFFFFF)
-val Surface = Color(0xFFFFFFFF)
-val Error = Color(0xFFB00020)
+// Primary
+val PrimaryBlue = Color(0xFF137FEC)
+val PrimaryBlueLight = Color(0xFFE8F3FE)
+val PrimaryBlueBorder = Color(0xFF8EC1F9)
+val PrimaryBlueBackground = Color(0xFFEFF7FF)
 
-// Text colors
-val OnPrimary = Color(0xFFFFFFFF)
-val OnSecondary = Color(0xFF000000)
-val OnBackground = Color(0xFF000000)
-val OnSurface = Color(0xFF000000)
-val OnError = Color(0xFFFFFFFF)
+// Tag colors
+val TagGreenBg = Color(0xFFECFDF5)
+val TagGreenText = Color(0xFF059669)
+val TagRedBg = Color(0xFFFFF1F2)
+val TagRedText = Color(0xFFE11D48)
 
-// Dark theme colors
-val DarkPrimary = Color(0xFFBB86FC)
-val DarkPrimaryVariant = Color(0xFF3700B3)
-val DarkSecondary = Color(0xFF03DAC6)
-val DarkBackground = Color(0xFF121212)
-val DarkSurface = Color(0xFF121212)
+// Slate
+val Slate50 = Color(0xFFF1F5F9)
+val Slate400 = Color(0xFF94A3B8)
+val Slate500 = Color(0xFF64748B)
+val Slate600 = Color(0xFF475569)
+val Slate700 = Color(0xFF48536D)
+
+// Button
+val ButtonEnabled = Color(0xFF2B2B2F)
+val ButtonDisabledBg = Color(0xFFF5F5F6)
+val ButtonDisabledText = Color(0xFFC0C5CC)
+
+// Card
+val CardBackground = Color(0xFFF6F7F8)
+val CardBorder = Color(0xFFF1F5F9)
+
+// Border
+val BorderDefault = Color(0xFFEBEBEB)
