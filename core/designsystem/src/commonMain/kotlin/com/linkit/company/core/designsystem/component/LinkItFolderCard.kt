@@ -21,6 +21,11 @@ import com.linkit.company.core.designsystem.theme.Black
 import com.linkit.company.core.designsystem.theme.G6
 import com.linkit.company.core.designsystem.theme.LinkItShape
 import com.linkit.company.core.designsystem.theme.LinkItTextStyle
+import com.linkit.company.core.designsystem.theme.G2
+import com.linkit.company.core.designsystem.theme.LinkItTheme
+import org.jetbrains.compose.ui.tooling.preview.Preview
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.width
 
 @Composable
 fun LinkItFolderCard(
@@ -75,5 +80,27 @@ fun LinkItFolderCard(
                 }
             }
         }
+    }
+}
+
+@Preview
+@Composable
+private fun LinkItFolderCardPreview() {
+    LinkItTheme {
+        LinkItFolderCard(
+            thumbnail = {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .aspectRatio(1.2f)
+                        .background(G2),
+                )
+            },
+            name = "교통",
+            itemCount = 6,
+            onClick = {},
+            onMoreClick = {},
+            modifier = Modifier.width(160.dp),
+        )
     }
 }

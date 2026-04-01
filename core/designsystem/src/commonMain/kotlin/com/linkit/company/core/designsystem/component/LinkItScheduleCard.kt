@@ -30,6 +30,9 @@ import com.linkit.company.core.designsystem.theme.LinkItTextStyle
 import com.linkit.company.core.designsystem.theme.PrimaryBlue
 import com.linkit.company.core.designsystem.theme.Slate500
 import com.linkit.company.core.designsystem.theme.Slate600
+import com.linkit.company.core.designsystem.theme.G2
+import com.linkit.company.core.designsystem.theme.LinkItTheme
+import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 fun LinkItScheduleCard(
@@ -116,5 +119,29 @@ fun LinkItScheduleCard(
                 tint = PrimaryBlue,
             )
         }
+    }
+}
+
+@Preview
+@Composable
+private fun LinkItScheduleCardPreview() {
+    LinkItTheme {
+        LinkItScheduleCard(
+            image = {
+                Box(
+                    modifier = Modifier
+                        .size(80.dp)
+                        .background(G2),
+                )
+            },
+            tags = listOf(
+                TagData("박물관", TagColorScheme.Blue),
+                TagData("조용한", TagColorScheme.Green),
+            ),
+            title = "루브르 박물관",
+            address = "뤼 드 리볼리, 75001 파리",
+            description = "세계 각지의 유물이 모여있는 박물관 입니다. 모나리자를 위해 드농 윙에 집중하세요.",
+            onDetailClick = {},
+        )
     }
 }

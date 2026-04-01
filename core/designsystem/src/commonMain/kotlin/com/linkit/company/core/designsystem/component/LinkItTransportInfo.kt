@@ -18,6 +18,8 @@ import com.linkit.company.core.designsystem.theme.LinkItShape
 import com.linkit.company.core.designsystem.theme.LinkItTextStyle
 import com.linkit.company.core.designsystem.theme.Slate500
 import com.linkit.company.core.designsystem.theme.Slate700
+import com.linkit.company.core.designsystem.theme.LinkItTheme
+import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 fun LinkItTransportInfo(
@@ -54,5 +56,16 @@ fun LinkItTransportInfo(
                 color = Slate500,
             )
         }
+    }
+}
+
+@Preview
+@Composable
+private fun LinkItTransportInfoPreview() {
+    LinkItTheme {
+        LinkItTransportInfo(
+            transportName = "신칸센 고속열차",
+            duration = "30분",
+        )
     }
 }

@@ -23,6 +23,8 @@ import com.linkit.company.core.designsystem.theme.G6
 import com.linkit.company.core.designsystem.theme.LinkItShape
 import com.linkit.company.core.designsystem.theme.LinkItTextStyle
 import com.linkit.company.core.designsystem.theme.TagRedText
+import com.linkit.company.core.designsystem.theme.LinkItTheme
+import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 fun LinkItTextField(
@@ -109,5 +111,47 @@ fun LinkItTextField(
                 }
             }
         }
+    }
+}
+
+@Preview
+@Composable
+private fun LinkItTextFieldEmptyPreview() {
+    LinkItTheme {
+        LinkItTextField(
+            value = "",
+            onValueChange = {},
+            label = "영상 링크",
+            placeholder = "URL 를 붙여넣거나 입력해주세요.",
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun LinkItTextFieldWithValuePreview() {
+    LinkItTheme {
+        LinkItTextField(
+            value = "https://youtube.com/watch?v=example",
+            onValueChange = {},
+            label = "영상 링크",
+            placeholder = "URL 를 붙여넣거나 입력해주세요.",
+            maxLength = 200,
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun LinkItTextFieldErrorPreview() {
+    LinkItTheme {
+        LinkItTextField(
+            value = "잘못된 링크",
+            onValueChange = {},
+            label = "영상 링크",
+            placeholder = "URL 를 붙여넣거나 입력해주세요.",
+            isError = true,
+            errorMessage = "올바른 URL을 입력해주세요",
+        )
     }
 }
