@@ -23,6 +23,12 @@ import kotlinx.serialization.json.Json
  *
  * 컴파일러 플러그인 이슈로 인해 iOS에선 수동 주입 필요
  * see: https://github.com/DroidKaigi/conference-app-2025/blob/07b46e6585ea6bdafe8a52142d1dd456fddda387/app-shared/src/iosMain/kotlin/io/github/droidkaigi/confsched/IosAppGraph.kt#L93-L97
+ *
+ * 동기화 필요 파일 목록:
+ * @see com.linkit.company.data.DataGraph
+ * @see com.linkit.company.data.repository.RepositoryGraph
+ * @see com.linkit.company.data.datasource.DataSourceGraph
+ * @see com.linkit.company.AndroidDataGraph
  */
 @DependencyGraph(
     scope = AppScope::class,
