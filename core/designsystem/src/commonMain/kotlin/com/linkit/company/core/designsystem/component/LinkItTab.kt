@@ -17,8 +17,6 @@ import com.linkit.company.core.designsystem.theme.G2
 import com.linkit.company.core.designsystem.theme.LinkItTextStyle
 import com.linkit.company.core.designsystem.theme.PrimaryBlue
 import com.linkit.company.core.designsystem.theme.Slate400
-import com.linkit.company.core.designsystem.theme.LinkItTheme
-import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 fun LinkItTab(
@@ -56,29 +54,5 @@ fun LinkItTab(
                 }
             }
         }
-    }
-}
-
-@Preview
-@Composable
-private fun LinkItTabFirstSelectedPreview() {
-    LinkItTheme {
-        LinkItTab(
-            tabs = listOf("여행 일정", "영상 요약"),
-            selectedIndex = 0,
-            onTabSelected = {},
-        )
-    }
-}
-
-@Preview
-@Composable
-private fun LinkItTabSecondSelectedPreview() {
-    LinkItTheme {
-        LinkItTab(
-            tabs = listOf("여행 일정", "영상 요약"),
-            selectedIndex = 1,
-            onTabSelected = {},
-        )
     }
 }

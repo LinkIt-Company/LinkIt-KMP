@@ -14,8 +14,6 @@ import com.linkit.company.core.designsystem.icon.LinkItIcons
 import com.linkit.company.core.designsystem.theme.HeaderText
 import com.linkit.company.core.designsystem.theme.LinkItTextStyle
 import com.linkit.company.core.designsystem.theme.White
-import com.linkit.company.core.designsystem.theme.LinkItTheme
-import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -53,25 +51,5 @@ fun LinkItTopAppBar(
             ),
         )
         LinkItDivider()
-    }
-}
-
-@Preview
-@Composable
-private fun LinkItTopAppBarPreview() {
-    LinkItTheme {
-        LinkItTopAppBar(title = "도쿄 신주쿠 여행")
-    }
-}
-
-@Preview
-@Composable
-private fun LinkItTopAppBarWithBackPreview() {
-    LinkItTheme {
-        LinkItTopAppBar(
-            title = "마이페이지",
-            showBackButton = true,
-            onBackClick = {},
-        )
     }
 }

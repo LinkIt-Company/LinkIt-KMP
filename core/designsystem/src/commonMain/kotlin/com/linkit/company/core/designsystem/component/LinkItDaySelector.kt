@@ -29,8 +29,6 @@ import com.linkit.company.core.designsystem.theme.White
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import com.linkit.company.core.designsystem.theme.LinkItTheme
-import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 fun LinkItDaySelector(
@@ -99,18 +97,5 @@ fun LinkItDaySelector(
                 )
             }
         }
-    }
-}
-
-@Preview
-@Composable
-private fun LinkItDaySelectorPreview() {
-    LinkItTheme {
-        LinkItDaySelector(
-            totalDays = 7,
-            selectedDay = 1,
-            onDaySelected = {},
-            availableDays = 4,
-        )
     }
 }

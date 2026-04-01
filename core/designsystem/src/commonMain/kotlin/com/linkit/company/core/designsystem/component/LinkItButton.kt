@@ -1,7 +1,5 @@
 package com.linkit.company.core.designsystem.component
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.PaddingValues
@@ -17,8 +15,6 @@ import com.linkit.company.core.designsystem.theme.ButtonEnabled
 import com.linkit.company.core.designsystem.theme.LinkItShape
 import com.linkit.company.core.designsystem.theme.LinkItTextStyle
 import com.linkit.company.core.designsystem.theme.White
-import com.linkit.company.core.designsystem.theme.LinkItTheme
-import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 fun LinkItButton(
@@ -46,21 +42,5 @@ fun LinkItButton(
             text = text,
             style = LinkItTextStyle.base2,
         )
-    }
-}
-
-@Preview
-@Composable
-private fun LinkItButtonEnabledPreview() {
-    LinkItTheme {
-        LinkItButton(text = "일정 생성하기", onClick = {})
-    }
-}
-
-@Preview
-@Composable
-private fun LinkItButtonDisabledPreview() {
-    LinkItTheme {
-        LinkItButton(text = "일정 생성하기", onClick = {}, enabled = false)
     }
 }

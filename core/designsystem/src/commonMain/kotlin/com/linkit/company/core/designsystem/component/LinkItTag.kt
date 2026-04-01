@@ -1,9 +1,6 @@
 package com.linkit.company.core.designsystem.component
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -15,8 +12,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.material3.Text
-import org.jetbrains.compose.ui.tooling.preview.Preview
-import com.linkit.company.core.designsystem.theme.LinkItTheme
 import com.linkit.company.core.designsystem.theme.LinkItShape
 import com.linkit.company.core.designsystem.theme.LinkItTextStyle
 import com.linkit.company.core.designsystem.theme.PrimaryBlue
@@ -82,32 +77,5 @@ fun LinkItTagRow(
                 colorScheme = tag.colorScheme,
             )
         }
-    }
-}
-
-@Preview
-@Composable
-private fun LinkItTagColorSchemesPreview() {
-    LinkItTheme {
-        Column {
-            TagColorScheme.entries.forEach { scheme ->
-                LinkItTag(text = scheme.name, colorScheme = scheme)
-                Spacer(modifier = Modifier.height(4.dp))
-            }
-        }
-    }
-}
-
-@Preview
-@Composable
-private fun LinkItTagRowPreview() {
-    LinkItTheme {
-        LinkItTagRow(
-            tags = listOf(
-                TagData("박물관", TagColorScheme.Blue),
-                TagData("조용한", TagColorScheme.Green),
-                TagData("SNS 핫플", TagColorScheme.Red),
-            ),
-        )
     }
 }

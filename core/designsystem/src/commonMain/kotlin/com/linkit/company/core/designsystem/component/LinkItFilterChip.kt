@@ -24,8 +24,6 @@ import com.linkit.company.core.designsystem.theme.PrimaryBlue
 import com.linkit.company.core.designsystem.theme.PrimaryBlueBackground
 import com.linkit.company.core.designsystem.theme.PrimaryBlueBorder
 import com.linkit.company.core.designsystem.theme.White
-import com.linkit.company.core.designsystem.theme.LinkItTheme
-import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 fun LinkItFilterChip(
@@ -62,25 +60,5 @@ fun LinkItFilterChip(
             modifier = Modifier.size(16.dp),
             tint = textColor,
         )
-    }
-}
-
-@Preview
-@Composable
-private fun LinkItFilterChipDefaultPreview() {
-    LinkItTheme {
-        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            LinkItFilterChip(label = "지역", onClick = {})
-            LinkItFilterChip(label = "여행 테마", onClick = {})
-            LinkItFilterChip(label = "비용", onClick = {})
-        }
-    }
-}
-
-@Preview
-@Composable
-private fun LinkItFilterChipSelectedPreview() {
-    LinkItTheme {
-        LinkItFilterChip(label = "지역", onClick = {}, selected = true)
     }
 }

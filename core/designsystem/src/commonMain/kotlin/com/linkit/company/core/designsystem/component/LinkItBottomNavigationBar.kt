@@ -18,8 +18,6 @@ import com.linkit.company.core.designsystem.theme.G8
 import com.linkit.company.core.designsystem.theme.G9
 import com.linkit.company.core.designsystem.theme.LinkItTextStyle
 import com.linkit.company.core.designsystem.theme.White
-import com.linkit.company.core.designsystem.theme.LinkItTheme
-import org.jetbrains.compose.ui.tooling.preview.Preview
 
 enum class BottomNavTab(
     val label: String,
@@ -68,27 +66,5 @@ fun LinkItBottomNavigationBar(
                 ),
             )
         }
-    }
-}
-
-@Preview
-@Composable
-private fun LinkItBottomNavigationBarMapPreview() {
-    LinkItTheme {
-        LinkItBottomNavigationBar(
-            selectedTab = BottomNavTab.Map,
-            onTabSelected = {},
-        )
-    }
-}
-
-@Preview
-@Composable
-private fun LinkItBottomNavigationBarStoragePreview() {
-    LinkItTheme {
-        LinkItBottomNavigationBar(
-            selectedTab = BottomNavTab.Storage,
-            onTabSelected = {},
-        )
     }
 }

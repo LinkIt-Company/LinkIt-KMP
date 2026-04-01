@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -18,8 +17,6 @@ import com.linkit.company.core.designsystem.theme.LinkItShape
 import com.linkit.company.core.designsystem.theme.LinkItTextStyle
 import com.linkit.company.core.designsystem.theme.Slate500
 import com.linkit.company.core.designsystem.theme.Slate700
-import com.linkit.company.core.designsystem.theme.LinkItTheme
-import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 fun LinkItTransportInfo(
@@ -56,16 +53,5 @@ fun LinkItTransportInfo(
                 color = Slate500,
             )
         }
-    }
-}
-
-@Preview
-@Composable
-private fun LinkItTransportInfoPreview() {
-    LinkItTheme {
-        LinkItTransportInfo(
-            transportName = "신칸센 고속열차",
-            duration = "30분",
-        )
     }
 }

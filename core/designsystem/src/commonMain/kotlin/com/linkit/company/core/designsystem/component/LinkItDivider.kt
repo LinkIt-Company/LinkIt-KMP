@@ -10,9 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import org.jetbrains.compose.ui.tooling.preview.Preview
 import com.linkit.company.core.designsystem.theme.G2
-import com.linkit.company.core.designsystem.theme.LinkItTheme
 
 @Composable
 fun LinkItDivider(
@@ -28,12 +26,4 @@ fun LinkItDivider(
             .height(thickness)
             .background(color),
     )
-}
-
-@Preview
-@Composable
-private fun LinkItDividerPreview() {
-    LinkItTheme {
-        LinkItDivider()
-    }
 }

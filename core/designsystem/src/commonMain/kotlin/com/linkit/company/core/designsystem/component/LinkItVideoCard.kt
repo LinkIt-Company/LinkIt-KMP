@@ -25,9 +25,6 @@ import com.linkit.company.core.designsystem.theme.LinkItFontFamily
 import com.linkit.company.core.designsystem.theme.LinkItShape
 import com.linkit.company.core.designsystem.theme.LinkItTextStyle
 import com.linkit.company.core.designsystem.theme.White
-import com.linkit.company.core.designsystem.theme.G2
-import com.linkit.company.core.designsystem.theme.LinkItTheme
-import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 fun LinkItVideoCard(
@@ -92,46 +89,5 @@ fun LinkItVideoCard(
                 color = Color(0xB3000000),
             )
         }
-    }
-}
-
-@Preview
-@Composable
-private fun LinkItVideoCardPreview() {
-    LinkItTheme {
-        LinkItVideoCard(
-            thumbnail = {
-                Box(
-                    modifier = Modifier
-                        .width(160.dp)
-                        .height(90.dp)
-                        .background(G2),
-                )
-            },
-            title = "유부남과 함께 오사카 좋은 놀이공원 가보기",
-            viewCount = "조회수 113만회",
-            onClick = {},
-            onCopyLinkClick = {},
-        )
-    }
-}
-
-@Preview
-@Composable
-private fun LinkItVideoCardNoCopyPreview() {
-    LinkItTheme {
-        LinkItVideoCard(
-            thumbnail = {
-                Box(
-                    modifier = Modifier
-                        .width(160.dp)
-                        .height(90.dp)
-                        .background(G2),
-                )
-            },
-            title = "유부남과 함께 오사카 좋은 놀이공원 가보기",
-            viewCount = "조회수 113만회",
-            onClick = {},
-        )
     }
 }

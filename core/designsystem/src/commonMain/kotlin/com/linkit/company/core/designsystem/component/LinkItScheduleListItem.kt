@@ -27,10 +27,6 @@ import com.linkit.company.core.designsystem.theme.G6
 import com.linkit.company.core.designsystem.theme.LinkItShape
 import com.linkit.company.core.designsystem.theme.LinkItTextStyle
 import com.linkit.company.core.designsystem.theme.Slate500
-import com.linkit.company.core.designsystem.theme.G2
-import com.linkit.company.core.designsystem.theme.LinkItTheme
-import org.jetbrains.compose.ui.tooling.preview.Preview
-import androidx.compose.foundation.background
 
 @Composable
 fun LinkItScheduleListItem(
@@ -124,31 +120,5 @@ fun LinkItScheduleListItem(
                 )
             }
         }
-    }
-}
-
-@Preview
-@Composable
-private fun LinkItScheduleListItemPreview() {
-    LinkItTheme {
-        LinkItScheduleListItem(
-            thumbnail = {
-                Box(
-                    modifier = Modifier
-                        .size(width = 80.dp, height = 100.dp)
-                        .background(G2),
-                )
-            },
-            tags = listOf(
-                TagData("#먹방여행", TagColorScheme.Slate),
-                TagData("#SNS 핫플레이스", TagColorScheme.Slate),
-            ),
-            title = "도쿄 신주쿠 여행",
-            duration = "3박4일",
-            cost = "82만원",
-            summary = "AI 한줄 요약된 여행지 정보",
-            onClick = {},
-            onMoreClick = {},
-        )
     }
 }
