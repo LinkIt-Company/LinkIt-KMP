@@ -1,6 +1,7 @@
 package com.linkit.company
 
 import com.linkit.company.data.DataScope
+import com.linkit.company.data.core.defaultJson
 import com.linkit.company.data.core.defaultKtorConfig
 import com.linkit.company.data.datasource.sample.SampleDataSource
 import com.linkit.company.data.datasource.sample.SampleDataSourceImpl
@@ -42,6 +43,9 @@ interface IosAppGraph : AppGraph {
 
     @Binds
     val SampleRepositoryImpl.bind: SampleRepository
+
+    @Provides
+    fun provideJson(): Json = defaultJson()
 
     @Provides
     fun provideBaseUrl(): String = ""
