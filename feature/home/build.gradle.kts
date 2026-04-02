@@ -12,6 +12,8 @@ kotlin {
             implementation(projects.core.common)
             implementation(projects.core.ui)
             implementation(projects.core.designsystem)
+            implementation(projects.core.navigation)
+            implementation(libs.bundles.jetbrainsNavigation3)
             implementation(projects.domain)
 
             // 탭 모듈

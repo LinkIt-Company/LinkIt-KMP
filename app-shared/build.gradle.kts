@@ -23,11 +23,6 @@ kotlin {
             implementation(projects.feature.intro)
             implementation(projects.feature.home)
             implementation(projects.feature.schedule)
-
-            // Navigation3
-            implementation(libs.bundles.jetbrainsNavigation3)
-
-            implementation(libs.kotlinxSerializationJson)
         }
     }
 }
