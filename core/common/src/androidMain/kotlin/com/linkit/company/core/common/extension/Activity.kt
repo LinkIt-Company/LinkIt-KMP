@@ -1,4 +1,4 @@
-package com.linkit.company.extension
+package com.linkit.company.core.common.extension
 
 import android.os.Build
 import androidx.activity.ComponentActivity

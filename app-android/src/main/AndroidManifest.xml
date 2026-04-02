@@ -19,7 +19,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MainActivity"
+            android:name="com.linkit.company.feature.home.HomeActivity"
             android:exported="false" />
     </application>
 

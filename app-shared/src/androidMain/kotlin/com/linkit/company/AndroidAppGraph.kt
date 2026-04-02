@@ -1,6 +1,7 @@
 package com.linkit.company
 
 import android.content.Context
+import com.linkit.company.core.common.AppGraph
 import com.linkit.company.data.DataScope
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.DependencyGraph

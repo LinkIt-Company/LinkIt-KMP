@@ -11,18 +11,10 @@ kotlin {
         commonMain.dependencies {
             // Core modules
             implementation(projects.core.common)
-            implementation(projects.core.ui)
-            implementation(projects.core.designsystem)
-            implementation(projects.core.navigation)
 
             // Domain & Data
             implementation(projects.domain)
             implementation(projects.data)
-
-            // Feature modules
-            implementation(projects.feature.intro)
-            implementation(projects.feature.home)
-            implementation(projects.feature.schedule)
         }
     }
 }
