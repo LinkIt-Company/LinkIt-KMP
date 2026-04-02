@@ -1,27 +1,41 @@
 package com.linkit.company.core.navigation
 
-import androidx.compose.runtime.snapshots.Snapshot
-import androidx.compose.runtime.snapshots.SnapshotStateList
+import androidx.navigation3.runtime.NavKey
 
-class LinkItNavigator internal constructor(
-    private val backStack: SnapshotStateList<LinkItRoute>,
-) {
-    fun navigate(route: LinkItRoute) {
-        if (backStack.lastOrNull() != route) {
-            backStack.add(route)
+class LinkItNavigator(private val navigationState: NavigationState) {
+    fun navigate(target: NavKey) {
+        when (target) {
+            navigationState.currentTopLevelRoute -> clearCurrentBackStack()
+            in navigationState.topLevelRoutes -> switchTab(target)
+            else -> pushRoute(target)
         }
     }
 
-    fun popBack() {
-        if (backStack.size > 1) {
-            backStack.removeLast()
+    fun navigateBack() {
+        if (navigationState.currentRoute == navigationState.currentTopLevelRoute) {
+            navigationState.topLevelStack.removeLastOrNull()
+        } else {
+            navigationState.currentTopLevelBackStack.removeLastOrNull()
         }
     }
 
-    fun navigateAndClearStack(route: LinkItRoute) {
-        Snapshot.withMutableSnapshot {
-            backStack.clear()
-            backStack.add(route)
+    private fun pushRoute(route: NavKey) {
+        navigationState.currentTopLevelBackStack.apply {
+            remove(route)
+            add(route)
+        }
+    }
+
+    private fun switchTab(target: NavKey) {
+        navigationState.topLevelStack.apply {
+            remove(target)
+            add(target)
+        }
+    }
+
+    private fun clearCurrentBackStack() {
+        navigationState.currentTopLevelBackStack.run {
+            if (size > 1) subList(1, size).clear()
         }
     }
 }

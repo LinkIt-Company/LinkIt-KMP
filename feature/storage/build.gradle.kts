@@ -13,6 +13,8 @@ kotlin {
             implementation(projects.core.ui)
             implementation(projects.core.designsystem)
             implementation(projects.domain)
+            implementation(projects.core.navigation)
+            implementation(libs.bundles.jetbrainsNavigation3)
         }
     }
 }
