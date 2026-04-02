@@ -4,12 +4,12 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
+import com.linkit.company.core.common.extension.enableEdgeToEdgeConfig
 import com.linkit.company.core.designsystem.theme.LinkItTheme
 
 class IntroActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
-        enableEdgeToEdge()
+        enableEdgeToEdgeConfig()
         super.onCreate(savedInstanceState)
 
         setContent {
@@ -19,7 +19,7 @@ class IntroActivity : ComponentActivity() {
                         startActivity(
                             Intent().setClassName(
                                 packageName,
-                                "com.linkit.company.android.MainActivity",
+                                "com.linkit.company.feature.home.HomeActivity",
                             )
                         )
                         finish()

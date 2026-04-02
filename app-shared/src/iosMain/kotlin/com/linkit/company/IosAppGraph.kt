@@ -1,5 +1,6 @@
 package com.linkit.company
 
+import com.linkit.company.core.common.AppGraph
 import com.linkit.company.data.DataScope
 import com.linkit.company.data.core.defaultJson
 import com.linkit.company.data.core.defaultKtorConfig

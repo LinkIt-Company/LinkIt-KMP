@@ -21,5 +21,8 @@ kotlin {
             implementation(projects.feature.storage)
             implementation(projects.feature.explore)
         }
+        androidMain.dependencies {
+            implementation(libs.androidx.activity.compose)
+        }
     }
 }
