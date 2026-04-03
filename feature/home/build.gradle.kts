@@ -10,6 +10,7 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             implementation(projects.core.common)
+            implementation(libs.metrox.viewmodel)
             implementation(projects.core.ui)
             implementation(projects.core.designsystem)
             implementation(projects.core.navigation)
