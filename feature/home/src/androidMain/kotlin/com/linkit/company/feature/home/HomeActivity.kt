@@ -8,16 +8,19 @@ import com.linkit.company.core.common.extension.enableEdgeToEdgeConfig
 import com.linkit.company.core.designsystem.theme.LinkItTheme
 import com.linkit.company.core.navigation.LinkItSavedStateConfiguration
 import com.linkit.company.feature.home.navigation.HomeNavDisplay
+import android.app.Activity
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesIntoMap
 import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.binding
 import dev.zacsweers.metrox.android.ActivityKey
+import dev.zacsweers.metrox.viewmodel.MetroViewModelFactory
 
-@ContributesIntoMap(AppScope::class)
+@ContributesIntoMap(AppScope::class, binding<Activity>())
 @ActivityKey(HomeActivity::class)
 @Inject
 class HomeActivity(
-    private val viewModelFactory: ViewModelProvider.Factory,
+    private val viewModelFactory: MetroViewModelFactory,
 ) : ComponentActivity() {
 
     override val defaultViewModelProviderFactory: ViewModelProvider.Factory
