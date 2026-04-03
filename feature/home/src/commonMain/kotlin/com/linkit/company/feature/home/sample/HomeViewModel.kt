@@ -2,6 +2,8 @@ package com.linkit.company.feature.home.sample
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.createSavedStateHandle
+import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.lifecycle.viewModelScope
 import com.linkit.company.core.common.architecture.MviContainer
 import com.linkit.company.core.common.architecture.MviContext
@@ -10,22 +12,19 @@ import com.linkit.company.core.common.architecture.popup.PopupEffectManager
 import com.linkit.company.core.common.architecture.popup.ToastExposureStatusType
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Assisted
+import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.ContributesIntoMap
 import dev.zacsweers.metro.Inject
-import dev.zacsweers.metrox.viewmodel.ViewModelKey
-import dev.zacsweers.metrox.viewmodel.CreationParams
+import dev.zacsweers.metrox.viewmodel.ViewModelAssistedFactory
+import dev.zacsweers.metrox.viewmodel.ViewModelAssistedFactoryKey
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-@ContributesIntoMap(AppScope::class)
-@ViewModelKey(HomeViewModel::class)
 @Inject
 class HomeViewModel(
-    @Assisted val creationParams: CreationParams,
+    @Assisted val savedStateHandle: SavedStateHandle,
 ) : ViewModel(),
     PopupEffectManager by InternalPopupEffectManager() {
-
-    private val savedStateHandle = creationParams.savedStateHandle
 
     private val container by lazy {
         MviContainer(
@@ -42,7 +41,6 @@ class HomeViewModel(
     val sideEffect = container.sideEffect
 
     private fun createInitialState(savedStateHandle: SavedStateHandle): HomeUiState {
-        creationParams
         return HomeUiState.INITIAL_STATE
     }
 
@@ -74,5 +72,15 @@ class HomeViewModel(
         closePopupEffect()
         container.close()
         super.onCleared()
+    }
+
+    @AssistedFactory
+    @ViewModelAssistedFactoryKey(HomeViewModel::class)
+    @ContributesIntoMap(AppScope::class)
+    fun interface Factory : ViewModelAssistedFactory {
+        override fun create(extras: CreationExtras): HomeViewModel {
+            return create(extras.createSavedStateHandle())
+        }
+        fun create(@Assisted savedStateHandle: SavedStateHandle): HomeViewModel
     }
 }
