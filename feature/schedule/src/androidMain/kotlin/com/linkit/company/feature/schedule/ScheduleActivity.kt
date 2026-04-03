@@ -3,6 +3,7 @@ package com.linkit.company.feature.schedule
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.lifecycle.ViewModelProvider
 import com.linkit.company.core.common.extension.enableEdgeToEdgeConfig
 import com.linkit.company.core.designsystem.theme.LinkItTheme
 import com.linkit.company.feature.schedule.navigation.ScheduleNavDisplay
@@ -14,7 +15,13 @@ import dev.zacsweers.metrox.android.ActivityKey
 @ContributesIntoMap(AppScope::class)
 @ActivityKey(ScheduleActivity::class)
 @Inject
-class ScheduleActivity : ComponentActivity() {
+class ScheduleActivity(
+    private val viewModelFactory: ViewModelProvider.Factory,
+) : ComponentActivity() {
+
+    override val defaultViewModelProviderFactory: ViewModelProvider.Factory
+        get() = viewModelFactory
+
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdgeConfig()
         super.onCreate(savedInstanceState)
