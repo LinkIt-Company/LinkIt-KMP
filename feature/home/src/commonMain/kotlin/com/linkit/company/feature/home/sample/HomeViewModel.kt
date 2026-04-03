@@ -8,11 +8,24 @@ import com.linkit.company.core.common.architecture.MviContext
 import com.linkit.company.core.common.architecture.popup.InternalPopupEffectManager
 import com.linkit.company.core.common.architecture.popup.PopupEffectManager
 import com.linkit.company.core.common.architecture.popup.ToastExposureStatusType
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.Assisted
+import dev.zacsweers.metro.ContributesIntoMap
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metrox.viewmodel.ViewModelKey
+import dev.zacsweers.metrox.viewmodel.CreationParams
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class HomeViewModel(savedStateHandle: SavedStateHandle) : ViewModel(),
+@ContributesIntoMap(AppScope::class)
+@ViewModelKey(HomeViewModel::class)
+@Inject
+class HomeViewModel(
+    @Assisted val creationParams: CreationParams,
+) : ViewModel(),
     PopupEffectManager by InternalPopupEffectManager() {
+
+    private val savedStateHandle = creationParams.savedStateHandle
 
     private val container by lazy {
         MviContainer(
@@ -29,6 +42,7 @@ class HomeViewModel(savedStateHandle: SavedStateHandle) : ViewModel(),
     val sideEffect = container.sideEffect
 
     private fun createInitialState(savedStateHandle: SavedStateHandle): HomeUiState {
+        creationParams
         return HomeUiState.INITIAL_STATE
     }
 
