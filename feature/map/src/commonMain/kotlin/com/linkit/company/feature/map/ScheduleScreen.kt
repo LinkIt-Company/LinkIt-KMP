@@ -1,4 +1,4 @@
-package com.linkit.company.feature.schedule
+package com.linkit.company.feature.map
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

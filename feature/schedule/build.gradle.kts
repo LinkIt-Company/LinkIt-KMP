@@ -16,5 +16,8 @@ kotlin {
             implementation(projects.core.navigation)
             implementation(libs.bundles.jetbrainsNavigation3)
         }
+        androidMain.dependencies {
+            implementation(libs.androidx.activity.compose)
+        }
     }
 }

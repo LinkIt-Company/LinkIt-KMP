@@ -8,6 +8,7 @@ import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.runtime.NavEntryDecorator
 import androidx.navigation3.runtime.NavKey
@@ -26,7 +27,7 @@ val LocalLinkItNavigator = compositionLocalOf<LinkItNavigator> {
 
 @Composable
 fun LinkItNavDisplay(
-    backStack: SnapshotStateList<NavKey>,
+    backStack: NavBackStack<NavKey>,
     onBack: () -> Unit,
     modifier: Modifier = Modifier,
     entryDecorators: List<NavEntryDecorator<NavKey>> = emptyList(),

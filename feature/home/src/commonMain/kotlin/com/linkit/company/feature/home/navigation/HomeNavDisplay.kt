@@ -1,4 +1,4 @@
-package com.linkit.company.feature.home
+package com.linkit.company.feature.home.navigation
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -23,7 +23,6 @@ import com.linkit.company.core.navigation.LocalLinkItNavigator
 import com.linkit.company.core.navigation.rememberNavigationState
 import com.linkit.company.core.navigation.toDecoratedEntries
 import com.linkit.company.feature.explore.navigation.exploreEntry
-import com.linkit.company.feature.home.navigation.TopLevelRoutes
 import com.linkit.company.feature.map.navigation.mapEntry
 import com.linkit.company.feature.storage.navigation.storageEntry
 
@@ -49,8 +48,9 @@ fun LinkItNavigationBar(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(
+fun HomeNavDisplay(
     savedStateConfiguration: SavedStateConfiguration,
+    navigateToScheduleEdit: () -> Unit = {},
     modifier: Modifier = Modifier,
 ) {
     val navigationState =
@@ -65,16 +65,17 @@ fun HomeScreen(
     val entryProvider = entryProvider {
         mapEntry(
             onOpenSchedule = {
-                navigator.navigate(LinkItNavKey.ScheduleEdit)
+//                navigator.navigate(LinkItNavKey.ScheduleEdit)
+                navigateToScheduleEdit()
             },
+            navigateToScheduleEdit = {
+//                navigator.navigate(LinkItNavKey.ScheduleEdit)
+                navigateToScheduleEdit()
+            }
         )
         storageEntry()
         exploreEntry()
     }
-
-//    var showScheduleSheet by rememberSaveable { mutableStateOf(false) }
-//    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = false)
-//    val coroutineScope = rememberCoroutineScope()
 
     CompositionLocalProvider(LocalLinkItNavigator provides navigator) {
         Scaffold(
@@ -94,26 +95,5 @@ fun HomeScreen(
                 entries = navigationState.toDecoratedEntries(entryProvider),
             )
         }
-
-//        if (showScheduleSheet) {
-//            ModalBottomSheet(
-//                sheetState = sheetState,
-//                onDismissRequest = { showScheduleSheet = false },
-//            ) {
-//                ScheduleScreen(
-//                    onNavigateToScheduleEdit = {
-//                        coroutineScope.launch { sheetState.hide() }.invokeOnCompletion {
-//                            showScheduleSheet = false
-//                        }
-//                        navigator.navigate(ScheduleEdit)
-//                    },
-//                    onBack = {
-//                        coroutineScope.launch { sheetState.hide() }.invokeOnCompletion {
-//                            showScheduleSheet = false
-//                        }
-//                    },
-//                )
-//            }
-//        }
     }
 }
