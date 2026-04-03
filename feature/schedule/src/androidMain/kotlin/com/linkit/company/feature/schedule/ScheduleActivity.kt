@@ -1,25 +1,21 @@
-package com.linkit.company.feature.home
+package com.linkit.company.feature.schedule
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import com.linkit.company.core.common.extension.enableEdgeToEdgeConfig
 import com.linkit.company.core.designsystem.theme.LinkItTheme
-import com.linkit.company.core.navigation.LinkItSavedStateConfiguration
-import com.linkit.company.feature.home.navigation.HomeNavDisplay
+import com.linkit.company.feature.schedule.navigation.ScheduleNavDisplay
 
-class HomeActivity : ComponentActivity() {
+class ScheduleActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdgeConfig()
         super.onCreate(savedInstanceState)
 
         setContent {
             LinkItTheme {
-                HomeNavDisplay(
-                    savedStateConfiguration = LinkItSavedStateConfiguration,
-                    navigateToScheduleEdit = {
-                        // ScheduleActivity 이동
-                    }
+                ScheduleNavDisplay(
+                    onFinishActivity = this::finish,
                 )
             }
         }

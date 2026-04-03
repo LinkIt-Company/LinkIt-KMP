@@ -21,6 +21,9 @@
         <activity
             android:name="com.linkit.company.feature.home.HomeActivity"
             android:exported="false" />
+        <activity
+            android:name="com.linkit.company.feature.schedule.ScheduleActivity"
+            android:exported="false" />
     </application>
 
 </manifest>
