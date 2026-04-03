@@ -13,11 +13,12 @@ import dev.zacsweers.metro.Inject
 import dev.zacsweers.metrox.android.ActivityKey
 
 @ContributesIntoMap(AppScope::class)
-@ActivityKey
+@ActivityKey(HomeActivity::class)
 @Inject
 class HomeActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdgeConfig()
+
         super.onCreate(savedInstanceState)
 
         setContent {
