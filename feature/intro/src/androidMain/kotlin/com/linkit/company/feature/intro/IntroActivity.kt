@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.lifecycle.ViewModelProvider
 import com.linkit.company.core.common.extension.enableEdgeToEdgeConfig
 import com.linkit.company.core.designsystem.theme.LinkItTheme
 import dev.zacsweers.metro.AppScope
@@ -14,7 +15,13 @@ import dev.zacsweers.metrox.android.ActivityKey
 @ContributesIntoMap(AppScope::class)
 @ActivityKey(IntroActivity::class)
 @Inject
-class IntroActivity : ComponentActivity() {
+class IntroActivity(
+    private val viewModelFactory: ViewModelProvider.Factory,
+) : ComponentActivity() {
+
+    override val defaultViewModelProviderFactory: ViewModelProvider.Factory
+        get() = viewModelFactory
+
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdgeConfig()
         super.onCreate(savedInstanceState)

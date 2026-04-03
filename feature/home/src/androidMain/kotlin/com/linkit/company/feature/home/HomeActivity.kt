@@ -3,6 +3,7 @@ package com.linkit.company.feature.home
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.lifecycle.ViewModelProvider
 import com.linkit.company.core.common.extension.enableEdgeToEdgeConfig
 import com.linkit.company.core.designsystem.theme.LinkItTheme
 import com.linkit.company.core.navigation.LinkItSavedStateConfiguration
@@ -15,10 +16,15 @@ import dev.zacsweers.metrox.android.ActivityKey
 @ContributesIntoMap(AppScope::class)
 @ActivityKey(HomeActivity::class)
 @Inject
-class HomeActivity : ComponentActivity() {
+class HomeActivity(
+    private val viewModelFactory: ViewModelProvider.Factory,
+) : ComponentActivity() {
+
+    override val defaultViewModelProviderFactory: ViewModelProvider.Factory
+        get() = viewModelFactory
+
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdgeConfig()
-
         super.onCreate(savedInstanceState)
 
         setContent {
