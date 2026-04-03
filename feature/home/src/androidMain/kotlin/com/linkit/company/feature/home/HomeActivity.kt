@@ -7,7 +7,14 @@ import com.linkit.company.core.common.extension.enableEdgeToEdgeConfig
 import com.linkit.company.core.designsystem.theme.LinkItTheme
 import com.linkit.company.core.navigation.LinkItSavedStateConfiguration
 import com.linkit.company.feature.home.navigation.HomeNavDisplay
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesIntoMap
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metrox.android.ActivityKey
 
+@ContributesIntoMap(AppScope::class)
+@ActivityKey
+@Inject
 class HomeActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdgeConfig()
@@ -18,7 +25,7 @@ class HomeActivity : ComponentActivity() {
                 HomeNavDisplay(
                     savedStateConfiguration = LinkItSavedStateConfiguration,
                     navigateToScheduleEdit = {
-                        // ScheduleActivity 이동
+                        // TODO: ScheduleActivity로 이동
                     }
                 )
             }

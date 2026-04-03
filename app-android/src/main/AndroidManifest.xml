@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <application
         android:name=".LinkitApplication"
@@ -11,7 +13,8 @@
         android:theme="@android:style/Theme.Material.Light.NoActionBar">
         <activity
             android:name="com.linkit.company.feature.intro.IntroActivity"
-            android:exported="true">
+            android:exported="true"
+            tools:ignore="Instantiatable">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -20,10 +23,12 @@
         </activity>
         <activity
             android:name="com.linkit.company.feature.home.HomeActivity"
-            android:exported="false" />
+            android:exported="false"
+            tools:ignore="Instantiatable" />
         <activity
             android:name="com.linkit.company.feature.schedule.ScheduleActivity"
-            android:exported="false" />
+            android:exported="false"
+            tools:ignore="Instantiatable" />
     </application>
 
 </manifest>
