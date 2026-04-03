@@ -17,9 +17,6 @@ kotlin {
             implementation(projects.domain)
             implementation(projects.data)
         }
-        androidMain.dependencies {
-            implementation(libs.metrox.android)
-        }
     }
 }
 
