@@ -1,3 +1,5 @@
 package com.linkit.company.core.common
 
-interface AppGraph
+import dev.zacsweers.metrox.viewmodel.ViewModelGraph
+
+interface AppGraph : ViewModelGraph
