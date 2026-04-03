@@ -9,14 +9,16 @@ Metro 버전은 `0.10.4`이며, Kotlin `2.2.20`과 호환됩니다.
 core:common
 └── AppGraph : ViewModelGraph                    ← ViewModel 주입 기반 (commonMain)
 
-app-shared
-├── AndroidAppGraph : AppGraph, MetroAppComponentProviders  ← Android DI 그래프 (androidMain)
-├── IosAppGraph : AppGraph                                  ← iOS DI 그래프 (iosMain, 수동 주입)
-└── InjectedViewModelFactory : MetroViewModelFactory        ← ViewModel 팩토리 구현체 (androidMain)
-
 app-android
-└── LinkitApplication : MetroApplication         ← AppComponentFactory 활성화
+├── AndroidAppGraph : AppGraph, MetroAppComponentProviders  ← Android DI 그래프
+├── InjectedViewModelFactory : MetroViewModelFactory        ← ViewModel 팩토리 구현체
+└── LinkitApplication : MetroApplication                    ← AppComponentFactory 활성화
+
+app-shared
+└── IosAppGraph : AppGraph                                  ← iOS DI 그래프 (iosMain, 수동 주입)
 ```
+
+> `AndroidAppGraph`는 `app-android` 모듈에 위치합니다. Metro 컴파일러가 `@ContributesIntoMap`을 수집하려면 `@DependencyGraph`가 선언된 모듈에서 모든 feature 모듈을 의존해야 하기 때문입니다.
 
 ### AppGraph (`core:common/commonMain`)
 
@@ -26,7 +28,7 @@ app-android
 interface AppGraph : ViewModelGraph
 ```
 
-### AndroidAppGraph (`app-shared/androidMain`)
+### AndroidAppGraph (`app-android`)
 
 Android 플랫폼의 DI 그래프입니다. `MetroAppComponentProviders`를 상속하여 Activity 생성자 주입을 지원합니다.
 
@@ -66,13 +68,12 @@ fun provideMetroViewModelFactory(
 
 > Kotlin 2.3.20+로 업그레이드하면 `@ContributesBinding` 자동 수집이 가능해져 수동 등록이 불필요해집니다.
 
-### InjectedViewModelFactory (`app-shared/androidMain`)
+### InjectedViewModelFactory (`app-android`)
 
 Android에서 Metro multibinding으로 수집된 ViewModel provider들을 `MetroViewModelFactory`에 주입하는 구현체입니다.
 
 ```kotlin
 @ContributesBinding(AppScope::class)
-@ContributesBinding(AppScope::class, binding = ViewModelProvider.Factory::class)
 @Inject
 class InjectedViewModelFactory(
     override val viewModelProviders: Map<KClass<out ViewModel>, Provider<ViewModel>>,
@@ -81,7 +82,7 @@ class InjectedViewModelFactory(
 ) : MetroViewModelFactory()
 ```
 
-두 개의 `@ContributesBinding`은 각각 `MetroViewModelFactory`와 `ViewModelProvider.Factory` 타입으로 바인딩합니다. Activity에서 `ViewModelProvider.Factory`를 생성자로 주입받을 때 이 클래스가 제공됩니다.
+`@ContributesBinding(AppScope::class)`은 `MetroViewModelFactory` 타입으로 바인딩됩니다. Activity에서 `MetroViewModelFactory`를 생성자로 주입받을 때 이 클래스가 제공됩니다.
 
 ### LinkitApplication (`app-android`)
 
@@ -109,11 +110,11 @@ class LinkitApplication : Application(), MetroApplication {
 `feature:xxx/src/androidMain/`에 생성합니다.
 
 ```kotlin
-@ContributesIntoMap(AppScope::class)
+@ContributesIntoMap(AppScope::class, binding<Activity>())
 @ActivityKey(XxxActivity::class)
 @Inject
 class XxxActivity(
-    private val viewModelFactory: ViewModelProvider.Factory,
+    private val viewModelFactory: MetroViewModelFactory,
 ) : ComponentActivity() {
 
     override val defaultViewModelProviderFactory: ViewModelProvider.Factory
@@ -134,11 +135,13 @@ class XxxActivity(
 
 | 어노테이션 | 역할 |
 |-----------|------|
-| `@ContributesIntoMap(AppScope::class)` | AppScope 그래프의 Activity multibinding map에 등록 |
+| `@ContributesIntoMap(AppScope::class, binding<Activity>())` | AppScope 그래프의 Activity multibinding map에 `Activity` 타입으로 등록 |
 | `@ActivityKey(XxxActivity::class)` | multibinding map의 key |
 | `@Inject` | Metro가 생성자 주입 대상으로 인식 |
 
-`viewModelFactory`는 `InjectedViewModelFactory` 인스턴스가 주입됩니다. `defaultViewModelProviderFactory`를 override하면 해당 Activity 내에서 `viewModel()`, `metroViewModel()`, `assistedMetroViewModel()` 등이 모두 Metro의 factory를 사용합니다.
+> **주의**: `binding<Activity>()`를 반드시 명시해야 합니다. 생략하면 `ComponentActivity` 타입으로 바인딩되어 `MetroAppComponentProviders.activityProviders` map에 수집되지 않고, 런타임에 "Couldn't call constructor" 에러가 발생합니다.
+
+`viewModelFactory`는 `InjectedViewModelFactory` 인스턴스(`MetroViewModelFactory` 타입)가 주입됩니다. `defaultViewModelProviderFactory`를 override하면 해당 Activity 내에서 `viewModel()`, `metroViewModel()`, `assistedMetroViewModel()` 등이 모두 Metro의 factory를 사용합니다.
 
 ### 2. AndroidManifest.xml 등록
 
@@ -164,6 +167,7 @@ dependencies {
 ```kotlin
 androidMain.dependencies {
     implementation(libs.metrox.android)
+    implementation(libs.metrox.viewmodel)
     implementation(libs.androidx.activity.compose)
 }
 ```
@@ -202,7 +206,7 @@ fun XxxScreen(
 Navigation route 인자를 받거나, 프로세스 복원 시 상태를 유지해야 할 때 `ViewModelAssistedFactory` 패턴을 사용합니다.
 
 ```kotlin
-@Inject
+@AssistedInject
 class XxxViewModel(
     @Assisted val savedStateHandle: SavedStateHandle,
     private val someRepository: SomeRepository,
@@ -222,6 +226,8 @@ class XxxViewModel(
     }
 }
 ```
+
+> **주의**: `SavedStateHandle`을 `@Assisted`로 받는 ViewModel은 클래스 어노테이션이 `@Inject`가 아닌 `@AssistedInject`여야 합니다.
 
 Compose에서 사용:
 
@@ -298,13 +304,13 @@ commonMain.dependencies {
 | 모듈 | sourceSet | 의존성 | 용도 |
 |------|-----------|--------|------|
 | `core:common` | commonMain | `libs.metrox.viewmodel` | AppGraph : ViewModelGraph |
-| `app-shared` | commonMain | `libs.metrox.viewmodel` | ViewModelGraph 타입 참조 |
-| `app-shared` | androidMain | `libs.metrox.android` | AndroidAppGraph : MetroAppComponentProviders |
-| `app-android` | - | `libs.metrox.viewmodel` | AppGraph 타입 참조 |
-| `app-android` | - | `libs.metrox.android` | MetroApplication |
+| `app-shared` | commonMain | `libs.metrox.viewmodel` | IosAppGraph에서 ViewModelGraph 타입 참조 |
+| `app-android` | - | `libs.metrox.viewmodel` | AndroidAppGraph, InjectedViewModelFactory |
+| `app-android` | - | `libs.metrox.android` | MetroApplication, MetroAppComponentProviders |
 | feature 모듈 | commonMain | `libs.metrox.viewmodel` | @ViewModelKey, ViewModelAssistedFactory |
 | feature 모듈 | commonMain | `libs.metrox.viewmodel.compose` | metroViewModel(), assistedMetroViewModel() |
 | feature 모듈 | androidMain | `libs.metrox.android` | @ActivityKey (Activity가 있는 모듈만) |
+| feature 모듈 | androidMain | `libs.metrox.viewmodel` | MetroViewModelFactory (Activity 생성자 주입) |
 
 ## 참고 문서
 
