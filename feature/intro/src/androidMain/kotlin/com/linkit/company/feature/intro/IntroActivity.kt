@@ -12,7 +12,7 @@ import dev.zacsweers.metro.Inject
 import dev.zacsweers.metrox.android.ActivityKey
 
 @ContributesIntoMap(AppScope::class)
-@ActivityKey
+@ActivityKey(IntroActivity::class)
 @Inject
 class IntroActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
