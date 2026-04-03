@@ -26,6 +26,7 @@ kotlin {
 dependencies {
     implementation(project(":core:common"))
     implementation(libs.metrox.viewmodel)
+    implementation(libs.metrox.android)
     implementation(project(":app-shared"))
     implementation(project(":feature:intro"))
     implementation(project(":feature:home"))
