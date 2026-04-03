@@ -1,146 +1,232 @@
-# LinkIt Company - Architecture
+# LinkIt-KMP Architecture
 
-## 📐 프로젝트 구조
+> 최종 업데이트: 2026-04-03
 
-이 프로젝트는 **Clean Architecture**와 **멀티모듈** 구조를 기반으로 설계되었습니다.
+## 변경 이력
+
+| 날짜 | 내용 |
+|------|------|
+| 2026-04-03 | 멀티 액티비티 구조, Navigation3 멀티 백스택, Metro DI ViewModel 연동 반영 |
+
+---
+
+## 프로젝트 구조
+
+이 프로젝트는 **Clean Architecture** + **멀티모듈** + **KMP (Kotlin Multiplatform)** 기반으로 설계되었습니다.
 
 ```
 LinkIt-KMP/
-├── app-shared/                   # 공유 KMP 모듈 (공통 UI/로직)
-├── app-android/                  # Android 애플리케이션 모듈 (진입점)
-├── app-ios/                      # iOS 애플리케이션 모듈 (Xcode)
-├── core/                         # 공통 모듈
-│   ├── common/                   # 공통 유틸리티, 확장 함수, 상수
-│   └── designsystem/             # 디자인 시스템 (테마, 컬러, 타이포그래피)
-├── domain/                       # 도메인 레이어
-│   ├── model/                    # 도메인 모델
-│   ├── repository/               # 리포지토리 인터페이스
-│   └── usecase/                  # 유스케이스
-├── data/                         # 데이터 레이어
-│   ├── repository/               # 리포지토리 구현
-│   ├── datasource/               # 데이터 소스 (remote, local)
-│   ├── dto/                      # Data Transfer Objects
-│   └── mapper/                   # DTO to Domain 매퍼
-└── feature/                      # 피쳐 모듈
-    ├── home/                     # 홈 화면
-    ├── classification/           # 분류 화면
-    ├── onboarding/               # 온보딩 화면
-    ├── save/                     # 저장 화면
-    ├── share/                    # 공유 화면
-    └── storage/                  # 저장소 화면
+├── app-android/                  # Android 애플리케이션 진입점
+├── app-shared/                   # KMP 공유 모듈 (DI 그래프)
+├── app-ios/                      # iOS 애플리케이션 (Xcode)
+├── core/
+│   ├── common/                   # 공통 유틸리티, MVI 아키텍처, AppGraph
+│   ├── ui/                       # 공통 UI 유틸리티
+│   ├── designsystem/             # Material3 테마, 컬러, 타이포그래피
+│   └── navigation/               # Navigation3 멀티 백스택, Route 정의
+├── domain/                       # 도메인 레이어 (Repository 인터페이스, UseCase, 모델)
+├── data/                         # 데이터 레이어 (Repository 구현, DataSource, DTO)
+├── feature/
+│   ├── intro/                    # 온보딩 (IntroActivity / IntroViewController)
+│   ├── home/                     # 홈 - 바텀네비 호스트 (HomeActivity / HomeViewController)
+│   ├── map/                      # 지도 탭
+│   ├── storage/                  # 보관함 탭
+│   ├── explore/                  # 탐색 탭
+│   └── schedule/                 # 일정 (ScheduleActivity)
+└── build-logic/                  # Convention Plugins
 ```
 
-## 🔗 의존성 규칙
+---
 
-### 허용되는 의존성
+## 모듈 의존성
+
+### 의존성 그래프
 
 ```
-app-shared → feature-*, domain, data, core-*
-app-android → app-shared
-feature-* → domain, core-*
-domain → core-*
-data → domain, core-*
-core-designsystem → core-common
+app-android
+├── app-shared
+├── core:common
+├── feature:intro
+├── feature:home
+└── feature:schedule
+
+app-shared
+├── core:common
+├── domain
+└── data
+
+feature:home (바텀네비 호스트)
+├── core:common, core:ui, core:designsystem, core:navigation
+├── domain
+├── feature:map        ← 탭
+├── feature:storage    ← 탭
+└── feature:explore    ← 탭
+
+feature:map, feature:storage, feature:explore, feature:schedule, feature:intro
+├── core:common, core:ui, core:designsystem
+└── domain
 ```
 
-### 금지되는 의존성
+### 의존성 규칙
 
-- ❌ **Feature 간 의존**: `feature-A → feature-B`
-- ❌ **Domain의 상위 레이어 의존**: `domain → data`, `domain → feature`
-- ❌ **Data의 상위 레이어 의존**: `data → feature`
-- ❌ **순환 의존**: 모든 순환 의존 금지
+**허용:**
+- `app-android` → `app-shared`, `feature:*`, `core:*`
+- `app-shared` → `core:common`, `domain`, `data`
+- `feature:home` → `feature:map`, `feature:storage`, `feature:explore` (탭 호스팅 관계)
+- `feature:*` → `core:*`, `domain`
+- `data` → `domain`, `core:*`
 
-## 📦 모듈 설명
+**금지:**
+- feature 간 의존 (home의 탭 호스팅 제외)
+- domain → data, feature
+- data → feature
+- 순환 의존
 
-### App 모듈
+---
 
-#### app-shared
-- 공통 UI 루트 및 앱 조립
-- 모든 shared 모듈 의존성 통합
-- iOS Framework 산출물 제공
+## 멀티 액티비티 구조
 
-#### app-android
-- Android 런처 모듈(애플리케이션 진입점)
-- `app-shared` UI/로직 실행
+각 feature 모듈이 자체 Activity(Android) / ViewController(iOS)를 소유합니다.
 
-#### app-ios
-- iOS 런처 모듈(Xcode 프로젝트)
-- `app-shared`에서 생성한 Framework 실행
+| feature 모듈 | Android | iOS |
+|-------------|---------|-----|
+| `feature:intro` | `IntroActivity` | `IntroViewController` |
+| `feature:home` | `HomeActivity` | `HomeViewController` |
+| `feature:schedule` | `ScheduleActivity` | - |
 
-### Core 모듈
+- Activity는 각 feature 모듈의 `androidMain`에 위치
+- ViewController는 각 feature 모듈의 `iosMain`에 위치
+- Activity 간 이동은 `Intent`를 통해 수행
+- Activity는 Metro DI를 통해 생성자 주입 (`@ActivityKey` + `@Inject`)
 
-#### core:common
-- 공통 유틸리티 함수
-- 확장 함수
-- 상수
-- Result 래퍼 클래스
+---
 
-#### core:designsystem
-- Material3 테마
-- 컬러 팔레트
-- 타이포그래피
-- 공통 UI 컴포넌트
+## Navigation3 멀티 백스택
 
-### Domain 모듈
-- 순수 Kotlin/비즈니스 로직
-- 플랫폼 독립적
-- Repository 인터페이스 정의
-- UseCase 구현
-- 도메인 모델 정의
+`core:navigation` 모듈에서 탭별 독립 백스택을 관리합니다.
 
-### Data 모듈
-- Repository 구현
-- 네트워크/로컬 데이터 소스
-- DTO 정의
-- Domain 모델로의 매핑
+### 핵심 컴포넌트
 
-### Feature 모듈
-각 피쳐 모듈은 독립적인 화면/기능을 담당:
-- UI (Compose)
-- ViewModel
-- Navigation
+| 클래스 | 역할 |
+|--------|------|
+| `LinkItNavKey` | Route 정의 (Map, Storage, Explore, ScheduleEdit) |
+| `NavigationState` | 탭별 독립 백스택 + 탭 전환 스택 관리 |
+| `LinkItNavigator` | 탭 전환 / 탭 내 push / back 처리 |
+| `LinkItNavDisplay` | NavDisplay 래퍼 (전환 애니메이션 포함) |
+| `LinkItSavedStateConfiguration` | Route polymorphic serializer 등록 |
 
-## 🛠️ Convention Plugins
+### Route 정의
 
-프로젝트는 Gradle Convention Plugins를 사용하여 빌드 로직을 공유합니다:
+```kotlin
+interface LinkItNavKey : NavKey {
+    data object Map : LinkItNavKey          // 탭
+    data object Storage : LinkItNavKey      // 탭
+    data object Explore : LinkItNavKey      // 탭
+    data object ScheduleEdit : LinkItNavKey // 서브 라우트
+}
+```
 
-- `kmp.shared.convention`: 공유 KMP 앱 모듈(`app-shared`)용
-- `android.application.convention`: Android 앱 모듈(`app-android`)용
-- `kmp.library.convention`: 라이브러리 모듈용
-- `kmp.feature.convention`: 피쳐 모듈용 (Compose 포함)
-- `kmp.core.convention`: Core 모듈용
+### 네비게이션 흐름
 
-## 🎯 아키텍처 장점
+- **탭 전환**: `navigator.navigate(LinkItNavKey.Storage)` → 탭 스택 전환, 각 탭 상태 보존
+- **같은 탭 재선택**: 해당 탭의 백스택을 루트로 초기화
+- **서브 라우트 push**: `navigator.navigate(LinkItNavKey.ScheduleEdit)` → 현재 탭 백스택에 push
+- **Back**: 탭 내 화면이면 pop, 탭 루트면 이전 탭으로 전환
 
-1. **명확한 관심사 분리**: 각 레이어가 고유한 책임을 가짐
-2. **테스트 용이성**: 각 모듈을 독립적으로 테스트 가능
-3. **확장성**: 새로운 기능을 독립적인 모듈로 추가 가능
-4. **빌드 성능**: 변경된 모듈만 재빌드
-5. **팀 협업**: 모듈별로 팀을 나눠 작업 가능
-6. **플랫폼 독립성**: Domain 레이어는 플랫폼 독립적
+### Entry Provider 패턴
 
-## 🚀 개발 가이드
+각 feature 모듈이 `navigation/` 패키지에 자체 entry를 정의합니다:
 
-### 새로운 Feature 추가하기
+```kotlin
+// feature:map/navigation/MapEntry.kt
+fun EntryProviderScope<NavKey>.mapEntry(...) {
+    entry<LinkItNavKey.Map> { MapScreen(...) }
+}
+```
 
-1. `feature/` 디렉토리에 새 모듈 생성
-2. `settings.gradle.kts`에 모듈 추가
-3. `build.gradle.kts`에 `kmp.feature.convention` 플러그인 적용
-4. `app-shared/build.gradle.kts`에 의존성 추가
+호스트 모듈(`feature:home`)에서 조립:
 
-### 새로운 UseCase 추가하기
+```kotlin
+val entryProvider = entryProvider {
+    mapEntry(...)
+    storageEntry()
+    exploreEntry()
+}
+```
 
-1. `domain/usecase/`에 UseCase 클래스 생성
-2. 필요한 경우 Repository 인터페이스 정의
-3. `data/repository/`에 구현 추가
+---
 
-### 공통 UI 컴포넌트 추가하기
+## DI (Metro)
 
-1. `core/designsystem/`에 컴포넌트 추가
-2. 모든 feature 모듈에서 사용 가능
+Metro DI 프레임워크를 사용합니다. 자세한 내용은 [METRO_INSTRUCTION.md](METRO_INSTRUCTION.md)를 참고하세요.
 
-## 📚 참고 자료
+### 그래프 구조
 
-- [Clean Architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html)
+```
+core:common/AppGraph : ViewModelGraph                    ← commonMain
+app-shared/AndroidAppGraph : AppGraph, MetroAppComponentProviders  ← androidMain
+app-shared/IosAppGraph : AppGraph                        ← iosMain (수동 주입)
+app-shared/InjectedViewModelFactory : MetroViewModelFactory        ← androidMain
+app-android/LinkitApplication : MetroApplication
+```
+
+### 스코프
+
+| 스코프 | 용도 |
+|--------|------|
+| `AppScope` | 앱 전역 싱글톤 (Application 생명주기) |
+| `DataScope` | 데이터 레이어 (Repository, DataSource, Ktor) |
+
+---
+
+## MVI 아키텍처
+
+`core:common`에 정의된 MVI 패턴을 사용합니다.
+
+| 컴포넌트 | 역할 |
+|---------|------|
+| `Intent` | 사용자 의도 (sealed interface) |
+| `UiState` | UI 상태 (data class) |
+| `SideEffect` | 일회성 이벤트 (sealed interface) |
+| `MviContainer` | 상태 관리 컨테이너 (`reduce`, `postSideEffect`, `intent`) |
+| `MviContext` | Intent 핸들러 컨텍스트 |
+| `PopupEffectManager` | Toast/Popup 처리 위임 |
+
+---
+
+## Convention Plugins
+
+`build-logic/`에 정의된 Gradle Convention Plugins:
+
+| 플러그인 | 대상 | 특징 |
+|---------|------|------|
+| `kmp.shared.convention` | `app-shared` | iOS Framework 생성, Metro 플러그인, Serialization |
+| `android.application.convention` | `app-android` | Android Application 설정 |
+| `kmp.library.convention` | core, domain, data | KMP 라이브러리, Metro 플러그인 |
+| `kmp.feature.convention` | feature 모듈 | `kmp.library.convention` + Compose |
+| `kmp.core.convention` | core 모듈 | `kmp.library.convention` 기반 |
+
+모든 KMP 모듈은 `iosArm64`, `iosSimulatorArm64` 타겟을 포함합니다.
+
+---
+
+## 플랫폼별 차이
+
+| 항목 | Android | iOS |
+|------|---------|-----|
+| 진입점 | Activity (feature 모듈) | ViewController (feature 모듈) |
+| DI 그래프 | AndroidAppGraph (자동 수집) | IosAppGraph (수동 @Provides) |
+| Activity 주입 | MetroAppComponentFactory | 해당 없음 |
+| ViewModel Factory | defaultViewModelProviderFactory override | LocalMetroViewModelFactory CompositionLocal |
+| 빌드 | Gradle → APK | Gradle → Framework → Xcode |
+
+---
+
+## 참고 문서
+
+- [Metro DI 가이드](METRO_INSTRUCTION.md)
+- [Navigation 구조](navigation-structure.md)
 - [Kotlin Multiplatform](https://kotlinlang.org/docs/multiplatform.html)
 - [Compose Multiplatform](https://www.jetbrains.com/lp/compose-multiplatform/)
+- [Navigation3](https://developer.android.com/jetpack/androidx/releases/navigation3)
+- [Metro](https://zacsweers.github.io/metro/latest/)
