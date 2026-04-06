@@ -30,7 +30,7 @@ fun MapScreen(
     onOpenSchedule: () -> Unit,
     navigateToScheduleEdit: () -> Unit,
 ) {
-    var showScheduleSheet by rememberSaveable { mutableStateOf(true) }
+    var showScheduleSheet by rememberSaveable { mutableStateOf(false) }
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = false)
     val coroutineScope = rememberCoroutineScope()
 
@@ -49,7 +49,10 @@ fun MapScreen(
         Spacer(modifier = Modifier.height(32.dp))
 
         Button(
-            onClick = onOpenSchedule,
+            onClick = {
+                showScheduleSheet = true
+                onOpenSchedule()
+            },
             modifier = Modifier.fillMaxWidth()
         ) {
             Text("Open Schedule")
