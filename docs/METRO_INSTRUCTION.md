@@ -299,6 +299,54 @@ commonMain.dependencies {
 
 ---
 
+## Navigator 바인딩
+
+Feature 모듈 간 Activity 전환을 위한 Navigator는 Metro DI로 바인딩됩니다.
+
+### Navigator 구현체 등록
+
+각 feature 모듈의 `androidMain`에 Navigator 구현체를 생성하고 `@ContributesBinding`으로 바인딩합니다:
+
+```kotlin
+// feature:home/androidMain/navigator/HomeNavigatorImpl.kt
+@ContributesBinding(AppScope::class)
+@Inject
+class HomeNavigatorImpl : HomeNavigator {
+    override fun navigateWithLauncher(
+        activity: ComponentActivity,
+        intentBuilder: (Intent.() -> Intent)?,
+        launcher: ActivityResultLauncher<Intent>?,
+    ) {
+        val intent = Intent(activity, HomeActivity::class.java).let {
+            intentBuilder?.invoke(it) ?: it
+        }
+        if (launcher != null) {
+            launcher.launch(intent)
+        } else {
+            activity.startActivity(intent)
+        }
+    }
+}
+```
+
+### Activity에서 Navigator 주입
+
+Activity 생성자에 Navigator를 추가하면 Metro가 자동으로 구현체를 주입합니다:
+
+```kotlin
+@ContributesIntoMap(AppScope::class, binding<Activity>())
+@ActivityKey(IntroActivity::class)
+@Inject
+class IntroActivity(
+    private val viewModelFactory: MetroViewModelFactory,
+    private val homeNavigator: HomeNavigator,  // Metro가 HomeNavigatorImpl을 주입
+) : ComponentActivity()
+```
+
+> Navigator 구현체는 stateless이므로 별도의 스코프 어노테이션 없이 바인딩됩니다.
+
+---
+
 ## 의존성 요약
 
 | 모듈 | sourceSet | 의존성 | 용도 |
@@ -311,6 +359,7 @@ commonMain.dependencies {
 | feature 모듈 | commonMain | `libs.metrox.viewmodel.compose` | metroViewModel(), assistedMetroViewModel() |
 | feature 모듈 | androidMain | `libs.metrox.android` | @ActivityKey (Activity가 있는 모듈만) |
 | feature 모듈 | androidMain | `libs.metrox.viewmodel` | MetroViewModelFactory (Activity 생성자 주입) |
+| `core:navigation` | androidMain | `libs.androidx.activity.compose` | Navigator base interface (ComponentActivity 참조) |
 
 ## 참고 문서
 

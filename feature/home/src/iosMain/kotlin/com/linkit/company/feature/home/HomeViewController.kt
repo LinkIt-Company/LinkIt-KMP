@@ -9,12 +9,18 @@ import com.linkit.company.feature.home.navigation.HomeNavDisplay
 import dev.zacsweers.metrox.viewmodel.compose.LocalMetroViewModelFactory
 
 @Suppress("UNUSED")
-fun HomeViewController(appGraph: AppGraph) = ComposeUIViewController {
+fun HomeViewController(
+    appGraph: AppGraph,
+    navigateToScheduleEdit: () -> Unit = {},
+) = ComposeUIViewController {
     CompositionLocalProvider(
         LocalMetroViewModelFactory provides appGraph.metroViewModelFactory
     ) {
         LinkItTheme {
-            HomeNavDisplay(savedStateConfiguration = LinkItSavedStateConfiguration)
+            HomeNavDisplay(
+                savedStateConfiguration = LinkItSavedStateConfiguration,
+                navigateToScheduleEdit = navigateToScheduleEdit,
+            )
         }
     }
 }
