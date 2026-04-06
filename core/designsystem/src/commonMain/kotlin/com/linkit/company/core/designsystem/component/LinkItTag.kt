@@ -1,17 +1,22 @@
 package com.linkit.company.core.designsystem.component
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.material3.Text
+import com.linkit.company.core.designsystem.theme.G3
+import com.linkit.company.core.designsystem.theme.G7
 import com.linkit.company.core.designsystem.theme.LinkItShape
 import com.linkit.company.core.designsystem.theme.LinkItTextStyle
 import com.linkit.company.core.designsystem.theme.PrimaryBlue
@@ -22,15 +27,18 @@ import com.linkit.company.core.designsystem.theme.TagGreenBg
 import com.linkit.company.core.designsystem.theme.TagGreenText
 import com.linkit.company.core.designsystem.theme.TagRedBg
 import com.linkit.company.core.designsystem.theme.TagRedText
+import com.linkit.company.core.designsystem.theme.White
 
 enum class TagColorScheme(
     val backgroundColor: Color,
     val textColor: Color,
+    val borderColor: Color? = null,
 ) {
     Blue(PrimaryBlueLight, PrimaryBlue),
     Green(TagGreenBg, TagGreenText),
     Red(TagRedBg, TagRedText),
     Slate(Slate50, Slate500),
+    Keyword(White, G7, G3),
 }
 
 data class TagData(
@@ -43,15 +51,30 @@ fun LinkItTag(
     text: String,
     colorScheme: TagColorScheme,
     modifier: Modifier = Modifier,
-    textStyle: TextStyle = LinkItTextStyle.tagText,
+    textStyle: TextStyle = if (colorScheme == TagColorScheme.Keyword) LinkItTextStyle.keywordTag else LinkItTextStyle.tagText,
 ) {
+    val isKeyword = colorScheme == TagColorScheme.Keyword
     Box(
         modifier = modifier
+            .then(
+                if (isKeyword) Modifier.height(26.dp) else Modifier,
+            )
             .background(
                 color = colorScheme.backgroundColor,
                 shape = LinkItShape.tag,
             )
-            .padding(horizontal = 6.dp, vertical = 2.dp),
+            .then(
+                if (colorScheme.borderColor != null) {
+                    Modifier.border(1.dp, colorScheme.borderColor, LinkItShape.tag)
+                } else {
+                    Modifier
+                },
+            )
+            .padding(
+                horizontal = if (isKeyword) 8.dp else 6.dp,
+                vertical = if (isKeyword) 6.dp else 2.dp,
+            ),
+        contentAlignment = if (isKeyword) Alignment.Center else Alignment.TopStart,
     ) {
         Text(
             text = text,

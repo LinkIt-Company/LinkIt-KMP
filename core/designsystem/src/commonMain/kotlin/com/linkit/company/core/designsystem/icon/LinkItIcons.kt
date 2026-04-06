@@ -4,7 +4,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.AttachMoney
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Person
@@ -19,4 +21,6 @@ object LinkItIcons {
     val MoreVert = Icons.Filled.MoreVert
     val Person = Icons.Filled.Person
     val Search = Icons.Filled.Search
+    val Calendar = Icons.Filled.DateRange
+    val AttachMoney = Icons.Filled.AttachMoney
 }

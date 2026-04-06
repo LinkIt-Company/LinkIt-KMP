@@ -1,5 +1,6 @@
 package com.linkit.company.core.designsystem.component
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -18,15 +19,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.linkit.company.core.designsystem.icon.LinkItIcons
-import com.linkit.company.core.designsystem.theme.Black
 import com.linkit.company.core.designsystem.theme.G6
+import com.linkit.company.core.designsystem.theme.LineSolidNormal
 import com.linkit.company.core.designsystem.theme.LinkItShape
 import com.linkit.company.core.designsystem.theme.LinkItTextStyle
-import com.linkit.company.core.designsystem.theme.Slate500
+import com.linkit.company.core.designsystem.theme.MetaGray
+import com.linkit.company.core.designsystem.theme.TitleBlack
 
 @Composable
 fun LinkItScheduleListItem(
@@ -86,38 +87,68 @@ fun LinkItScheduleListItem(
             // Title
             Text(
                 text = title,
-                style = LinkItTextStyle.heading,
-                color = Black,
+                style = LinkItTextStyle.base2,
+                color = TitleBlack,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
             )
 
-            // Meta info (duration | cost)
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-            ) {
-                Text(
-                    text = duration,
-                    style = LinkItTextStyle.small,
-                    color = Slate500,
-                )
-                Text(
-                    text = cost,
-                    style = LinkItTextStyle.small,
-                    color = Slate500,
-                )
-            }
+            // Meta info (calendar icon + duration | money icon + cost)
+            Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                ) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(2.dp),
+                    ) {
+                        Icon(
+                            imageVector = LinkItIcons.Calendar,
+                            contentDescription = null,
+                            modifier = Modifier.size(16.dp),
+                            tint = MetaGray,
+                        )
+                        Text(
+                            text = duration,
+                            style = LinkItTextStyle.metaInfo,
+                            color = MetaGray,
+                        )
+                    }
+                    Box(
+                        modifier = Modifier
+                            .width(1.dp)
+                            .height(12.dp)
+                            .background(LineSolidNormal),
+                    )
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(2.dp),
+                    ) {
+                        Icon(
+                            imageVector = LinkItIcons.AttachMoney,
+                            contentDescription = null,
+                            modifier = Modifier.size(16.dp),
+                            tint = MetaGray,
+                        )
+                        Text(
+                            text = cost,
+                            style = LinkItTextStyle.metaInfo,
+                            color = MetaGray,
+                        )
+                    }
+                }
 
-            // AI Summary
-            if (!summary.isNullOrEmpty()) {
-                Text(
-                    text = summary,
-                    style = LinkItTextStyle.small,
-                    color = G6,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                )
+                // AI Summary
+                if (!summary.isNullOrEmpty()) {
+                    Text(
+                        text = summary,
+                        style = LinkItTextStyle.body,
+                        color = G6,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                    )
+                }
             }
         }
     }

@@ -84,7 +84,7 @@ fun DesignShowcaseScreen(
                         LinkItTag(text = "박물관", colorScheme = TagColorScheme.Blue)
                         LinkItTag(text = "조용한", colorScheme = TagColorScheme.Green)
                         LinkItTag(text = "SNS 핫플", colorScheme = TagColorScheme.Red)
-                        LinkItTag(text = "#먹방여행", colorScheme = TagColorScheme.Slate)
+                        LinkItTag(text = "# 먹방여행", colorScheme = TagColorScheme.Keyword)
                     }
                 }
             }
@@ -215,8 +215,8 @@ fun DesignShowcaseScreen(
                     LinkItScheduleListItem(
                         thumbnail = { PlaceholderBox(Modifier.size(width = 80.dp, height = 100.dp)) },
                         tags = listOf(
-                            TagData("#먹방여행", TagColorScheme.Slate),
-                            TagData("#SNS 핫플레이스", TagColorScheme.Slate),
+                            TagData("# 먹방여행", TagColorScheme.Keyword),
+                            TagData("# SNS 핫플레이스", TagColorScheme.Keyword),
                         ),
                         title = "도쿄 신주쿠 여행",
                         duration = "3박4일",
@@ -229,7 +229,7 @@ fun DesignShowcaseScreen(
                     LinkItScheduleListItem(
                         thumbnail = { PlaceholderBox(Modifier.size(width = 80.dp, height = 100.dp)) },
                         tags = listOf(
-                            TagData("#먹방여행", TagColorScheme.Slate),
+                            TagData("# 먹방여행", TagColorScheme.Keyword),
                         ),
                         title = "도쿄 나가노 여행",
                         duration = "2박3일",

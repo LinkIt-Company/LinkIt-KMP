@@ -321,8 +321,8 @@ private fun LinkItScheduleListItemPreview() {
                 )
             },
             tags = listOf(
-                TagData("#먹방여행", TagColorScheme.Slate),
-                TagData("#SNS 핫플레이스", TagColorScheme.Slate),
+                TagData("# 먹방여행", TagColorScheme.Keyword),
+                TagData("# SNS 핫플레이스", TagColorScheme.Keyword),
             ),
             title = "도쿄 신주쿠 여행",
             duration = "3박4일",

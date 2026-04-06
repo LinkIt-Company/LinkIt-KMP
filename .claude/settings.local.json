@@ -2,7 +2,9 @@
   "permissions": {
     "allow": [
       "Bash(./gradlew compileKotlinDesktop)",
-      "Bash(./gradlew :app:compileDebugKotlinAndroid)"
+      "Bash(./gradlew :app:compileDebugKotlinAndroid)",
+      "Bash(./gradlew :core:designsystem:compileKotlinAndroid)",
+      "Bash(./gradlew :app-android:assembleDebug)"
     ]
   }
 }

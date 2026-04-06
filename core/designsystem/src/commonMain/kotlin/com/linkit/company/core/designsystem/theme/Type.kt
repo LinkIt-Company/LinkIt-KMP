@@ -60,6 +60,26 @@ object LinkItTextStyle {
         lineHeight = 13.sp,
         letterSpacing = 0.5.sp,
     )
+    val chipLabel = TextStyle(
+        fontFamily = LinkItFontFamily,
+        fontWeight = FontWeight.Bold,
+        fontSize = 13.sp,
+        lineHeight = 18.2.sp,
+    )
+    val keywordTag = TextStyle(
+        fontFamily = LinkItFontFamily,
+        fontWeight = FontWeight.Normal,
+        fontSize = 10.sp,
+        lineHeight = 14.sp,
+        letterSpacing = (-0.1).sp,
+    )
+    val metaInfo = TextStyle(
+        fontFamily = LinkItFontFamily,
+        fontWeight = FontWeight.Bold,
+        fontSize = 12.sp,
+        lineHeight = 16.2.sp,
+        letterSpacing = 0.174.sp,
+    )
 }
 
 val LinkItTypography = Typography(

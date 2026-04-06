@@ -17,13 +17,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import com.linkit.company.core.designsystem.icon.LinkItIcons
 import com.linkit.company.core.designsystem.theme.Black
-import com.linkit.company.core.designsystem.theme.BorderDefault
+import com.linkit.company.core.designsystem.theme.ChipBackground
 import com.linkit.company.core.designsystem.theme.LinkItShape
 import com.linkit.company.core.designsystem.theme.LinkItTextStyle
 import com.linkit.company.core.designsystem.theme.PrimaryBlue
 import com.linkit.company.core.designsystem.theme.PrimaryBlueBackground
 import com.linkit.company.core.designsystem.theme.PrimaryBlueBorder
-import com.linkit.company.core.designsystem.theme.White
 
 @Composable
 fun LinkItFilterChip(
@@ -33,8 +32,7 @@ fun LinkItFilterChip(
     selected: Boolean = false,
     leadingIcon: @Composable (() -> Unit)? = null,
 ) {
-    val backgroundColor = if (selected) PrimaryBlueBackground else White
-    val borderColor = if (selected) PrimaryBlueBorder else BorderDefault
+    val backgroundColor = if (selected) PrimaryBlueBackground else ChipBackground
     val textColor = if (selected) PrimaryBlue else Black
 
     Row(
@@ -42,16 +40,19 @@ fun LinkItFilterChip(
             .height(34.dp)
             .clip(LinkItShape.pill)
             .background(backgroundColor)
-            .border(1.dp, borderColor, LinkItShape.pill)
+            .then(
+                if (selected) Modifier.border(1.dp, PrimaryBlueBorder, LinkItShape.pill)
+                else Modifier,
+            )
             .clickable(onClick = onClick)
-            .padding(horizontal = 12.dp),
+            .padding(start = 12.dp, end = 14.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(4.dp),
     ) {
         leadingIcon?.invoke()
         Text(
             text = label,
-            style = LinkItTextStyle.caption1,
+            style = LinkItTextStyle.chipLabel,
             color = textColor,
         )
         Icon(
