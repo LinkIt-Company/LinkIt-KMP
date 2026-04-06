@@ -42,3 +42,12 @@ main          ← 최상위 (릴리스)
 | `test`　　 | 테스트 추가/수정　　　　　　 |
 
 - 예시: `feat: 홈 화면 UI 구현`, `fix: 로그인 시 크래시 수정`
+
+## 참고 문서
+
+### docs/METRO_INSTRUCTION.md
+아래 상황에서 반드시 읽고 참고할 것:
+- 새 Activity, ViewModel, iOS ViewController를 생성할 때
+- 새 feature 모듈을 추가할 때
+- Metro DI 관련 에러(MissingBinding, Couldn't call constructor 등)가 발생했을 때
+- IosAppGraph에 수동 등록이 필요할 때
