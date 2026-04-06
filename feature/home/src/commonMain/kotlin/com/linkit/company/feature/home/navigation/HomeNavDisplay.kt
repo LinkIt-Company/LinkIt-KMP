@@ -23,7 +23,7 @@ import com.linkit.company.core.navigation.LocalLinkItNavigator
 import com.linkit.company.core.navigation.rememberNavigationState
 import com.linkit.company.core.navigation.toDecoratedEntries
 import com.linkit.company.feature.explore.navigation.exploreEntry
-import com.linkit.company.feature.map.navigation.mapEntry
+import com.linkit.company.feature.map.main.navigation.mapEntry
 import com.linkit.company.feature.storage.navigation.storageEntry
 
 @Composable
