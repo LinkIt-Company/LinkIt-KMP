@@ -1,5 +1,6 @@
 plugins {
     id("kmp.core.convention")
+    id("kmp.screenshot.test.convention")
 }
 
 android {

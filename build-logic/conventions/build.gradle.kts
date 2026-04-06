@@ -26,6 +26,10 @@ gradlePlugin {
             id = "android.application.convention"
             implementationClass = "com.linkit.company.buildlogic.AndroidApplicationConventionPlugin"
         }
+        register("kmpScreenshotTestConvention") {
+            id = "kmp.screenshot.test.convention"
+            implementationClass = "com.linkit.company.buildlogic.KmpScreenshotTestConventionPlugin"
+        }
     }
 }
 
@@ -34,4 +38,5 @@ dependencies {
     compileOnly(libs.kotlin.gradlePlugin)
     compileOnly(libs.compose.gradlePlugin)
     compileOnly("dev.zacsweers.metro:dev.zacsweers.metro.gradle.plugin:${libs.versions.metro.get()}")
+    compileOnly("io.github.takahirom.roborazzi:roborazzi-gradle-plugin:${libs.versions.roborazzi.get()}")
 }
