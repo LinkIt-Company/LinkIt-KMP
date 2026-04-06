@@ -1,5 +1,6 @@
 package com.linkit.company
 
+import com.linkit.company.core.common.AppGraph
 import com.linkit.company.data.DataScope
 import com.linkit.company.data.core.defaultJson
 import com.linkit.company.data.core.defaultKtorConfig
@@ -7,13 +8,19 @@ import com.linkit.company.data.datasource.sample.SampleDataSource
 import com.linkit.company.data.datasource.sample.SampleDataSourceImpl
 import com.linkit.company.data.repository.SampleRepositoryImpl
 import com.linkit.company.domain.repository.SampleRepository
+import androidx.lifecycle.ViewModel
 import de.jensklingenberg.ktorfit.Ktorfit
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Binds
 import dev.zacsweers.metro.DependencyGraph
+import dev.zacsweers.metro.Provider
 import dev.zacsweers.metro.Provides
 import dev.zacsweers.metro.createGraphFactory
+import dev.zacsweers.metrox.viewmodel.ManualViewModelAssistedFactory
+import dev.zacsweers.metrox.viewmodel.MetroViewModelFactory
+import dev.zacsweers.metrox.viewmodel.ViewModelAssistedFactory
 import io.ktor.client.HttpClient
+import kotlin.reflect.KClass
 import io.ktor.client.engine.darwin.Darwin
 import kotlinx.serialization.json.Json
 
@@ -55,6 +62,17 @@ interface IosAppGraph : AppGraph {
         return HttpClient(Darwin) {
             defaultKtorConfig(json)
         }
+    }
+
+    @Provides
+    fun provideMetroViewModelFactory(
+        viewModelProviders: Map<KClass<out ViewModel>, Provider<ViewModel>>,
+        assistedFactoryProviders: Map<KClass<out ViewModel>, Provider<ViewModelAssistedFactory>>,
+        manualAssistedFactoryProviders: Map<KClass<out ManualViewModelAssistedFactory>, Provider<ManualViewModelAssistedFactory>>,
+    ): MetroViewModelFactory = object : MetroViewModelFactory() {
+        override val viewModelProviders = viewModelProviders
+        override val assistedFactoryProviders = assistedFactoryProviders
+        override val manualAssistedFactoryProviders = manualAssistedFactoryProviders
     }
 
     @Provides

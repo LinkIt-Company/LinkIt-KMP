@@ -24,7 +24,14 @@ kotlin {
 }
 
 dependencies {
+    implementation(project(":core:common"))
+    implementation(project(":domain"))
+    implementation(project(":data"))
+    implementation(libs.metrox.viewmodel)
+    implementation(libs.metrox.android)
     implementation(project(":app-shared"))
     implementation(project(":feature:intro"))
+    implementation(project(":feature:home"))
+    implementation(project(":feature:schedule"))
     implementation(libs.androidx.activity.compose)
 }

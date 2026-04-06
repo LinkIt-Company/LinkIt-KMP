@@ -16,6 +16,8 @@ kotlin {
         }
         androidMain.dependencies {
             implementation(libs.androidx.activity.compose)
+            implementation(libs.metrox.android)
+            implementation(libs.metrox.viewmodel)
         }
     }
 }
