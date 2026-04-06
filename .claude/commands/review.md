@@ -2,9 +2,11 @@ $ARGUMENTS 번호의 PR 코드 변경사항을 분석하고 코드 리뷰를 수
 
 ## 진행 순서
 
-1. **PR 정보 수집**: 아래 명령어들을 병렬로 실행하여 PR 정보를 파악한다.
-   - `gh pr view $ARGUMENTS --json title,body,state,files` — PR 메타데이터 및 변경 파일 목록 확인
+1. **PR 정보 수집 및 브랜치 체크아웃**: 아래 명령어들을 병렬로 실행하여 PR 정보를 파악한다.
+   - `gh pr view $ARGUMENTS --json title,body,state,files,headRefName` — PR 메타데이터 및 변경 파일 목록 확인
    - `gh pr diff $ARGUMENTS` — 코드 변경사항 확인
+   - PR 브랜치를 로컬에 가져와 체크아웃한다: `git fetch origin <headRefName> && git checkout <headRefName>`
+     - 이렇게 해야 PR에서 새로 추가된 파일을 직접 읽을 수 있다.
 
 2. **프로젝트 구조 파악**: 변경된 파일이 속한 모듈과 주변 코드를 읽어서 기존 패턴과 컨벤션을 파악한다.
 
