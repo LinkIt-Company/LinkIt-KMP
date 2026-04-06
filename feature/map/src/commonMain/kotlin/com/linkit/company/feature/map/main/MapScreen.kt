@@ -1,4 +1,4 @@
-package com.linkit.company.feature.map
+package com.linkit.company.feature.map.main
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -10,19 +10,17 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import kotlinx.coroutines.launch
+import com.linkit.company.feature.map.schedule.ScheduleBottomSheet
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -32,7 +30,6 @@ fun MapScreen(
 ) {
     var showScheduleSheet by rememberSaveable { mutableStateOf(false) }
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = false)
-    val coroutineScope = rememberCoroutineScope()
 
     Column(
         modifier = Modifier
@@ -60,23 +57,11 @@ fun MapScreen(
     }
 
     if (showScheduleSheet) {
-        ModalBottomSheet(
-            sheetState = sheetState,
-            onDismissRequest = { showScheduleSheet = false },
-        ) {
-            ScheduleScreen(
-                onNavigateToScheduleEdit = {
-                    coroutineScope.launch { sheetState.hide() }.invokeOnCompletion {
-                        showScheduleSheet = false
-                    }
-                    navigateToScheduleEdit()
-                },
-                onBack = {
-                    coroutineScope.launch { sheetState.hide() }.invokeOnCompletion {
-                        showScheduleSheet = false
-                    }
-                },
-            )
-        }
+        ScheduleBottomSheet(
+            modifier = Modifier,
+            bottomSheetState = sheetState,
+            handleBottomSheetCollapsedState = { showScheduleSheet = it },
+            navigateToScheduleEdit = navigateToScheduleEdit,
+        )
     }
 }

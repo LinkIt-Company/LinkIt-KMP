@@ -1,4 +1,4 @@
-package com.linkit.company.feature.map
+package com.linkit.company.feature.map.schedule
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -8,16 +8,52 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.launch
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+internal fun ScheduleBottomSheet(
+    bottomSheetState: SheetState,
+    handleBottomSheetCollapsedState: (Boolean) -> Unit,
+    navigateToScheduleEdit: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    val coroutineScope = rememberCoroutineScope()
+
+    ModalBottomSheet(
+        modifier = modifier,
+        sheetState = bottomSheetState,
+        onDismissRequest = { handleBottomSheetCollapsedState(false) },
+    ) {
+        ScheduleContentScreen(
+            onNavigateToScheduleEdit = {
+                coroutineScope
+                    .launch { bottomSheetState.hide() }
+                    .invokeOnCompletion { handleBottomSheetCollapsedState(false) }
+                navigateToScheduleEdit()
+            },
+            onBack = {
+                coroutineScope
+                    .launch { bottomSheetState.hide() }
+                    .invokeOnCompletion { handleBottomSheetCollapsedState(false) }
+            },
+        )
+    }
+}
 
 @Composable
-fun ScheduleScreen(
+private fun ScheduleContentScreen(
     onNavigateToScheduleEdit: () -> Unit = {},
     onBack: () -> Unit = {},
 ) {
