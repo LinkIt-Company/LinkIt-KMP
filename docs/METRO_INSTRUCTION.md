@@ -316,18 +316,11 @@ class HomeNavigatorImpl : HomeNavigator {
         activity: ComponentActivity,
         intentBuilder: (Intent.() -> Intent)?,
         launcher: ActivityResultLauncher<Intent>?,
-    ) {
-        val intent = Intent(activity, HomeActivity::class.java).let {
-            intentBuilder?.invoke(it) ?: it
-        }
-        if (launcher != null) {
-            launcher.launch(intent)
-        } else {
-            activity.startActivity(intent)
-        }
-    }
+    ) = startActivity<HomeActivity>(activity, intentBuilder, launcher)
 }
 ```
+
+`startActivity<T>()`는 `Navigator`의 확장 함수로, Intent 생성 및 launcher 분기 로직을 공통 처리합니다.
 
 ### Activity에서 Navigator 주입
 
