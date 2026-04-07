@@ -19,16 +19,31 @@ $ARGUMENTS URL의 Figma 디자인을 Compose UI 코드로 구현한다.
    - `commonMain`에 배치하여 KMP 호환을 유지한다
    - `@Preview` 함수도 `androidMain`에 함께 생성한다
 
-5. **스크린샷 테스트 작성**: Roborazzi로 시각적 검증을 수행한다.
+5. **스크린샷 테스트 작성**: Roborazzi로 Compose 렌더링 골든 이미지를 생성한다.
    - 생성된 화면의 스크린샷 테스트를 `androidUnitTest`에 작성한다
    - `./gradlew :모듈:recordRoborazziDebug`로 골든 이미지를 생성한다
-   - `./gradlew :모듈:compareRoborazziDebug`로 비교 이미지를 생성한다
-   - 골든 이미지와 비교 이미지는 `screenshots/` 폴더에 저장된다
-   - Figma 스크린샷과 비교하여 구현 정확도를 시각적으로 확인한다
+   - 골든 이미지는 `screenshots/` 폴더에 저장된다
 
-6. **결과 확인**: 구현 결과를 사용자에게 보여주고 피드백을 요청한다.
-   - Figma 원본 스크린샷과 Compose 스크린샷을 함께 제시한다
-   - 수정이 필요한 부분을 반영한다
+6. **Figma 스크린샷 비교**: `scripts/compare-figma.sh`로 Figma 원본과 Compose 렌더링을 픽셀 비교한다.
+   - 사전 조건: `FIGMA_TOKEN` 환경변수 설정 필요 (Figma Personal Access Token)
+   - URL에서 추출한 fileKey와 nodeId를 사용한다
+   - 스크립트 실행:
+     ```
+     ./scripts/compare-figma.sh <fileKey> <nodeId> <모듈> <테스트클래스> <테스트이름>
+     ```
+   - 스크립트 동작 과정:
+     1. Figma API로 스크린샷을 다운로드한다
+     2. Compose 골든 이미지 크기에 맞게 리사이즈한다
+     3. 골든 이미지를 Figma 스크린샷으로 임시 교체한다
+     4. `compareRoborazziDebug`를 실행하여 diff 이미지를 생성한다
+     5. 골든 이미지를 원래대로 복원한다
+   - 비교 결과는 `screenshots/` 폴더에 `*_compare.png`로 저장된다
+   - 비교 이미지에서 빨간 부분이 Figma와 Compose의 차이 영역이다
+   - `FIGMA_TOKEN`이 없으면 사용자에게 요청한다
+
+7. **결과 확인**: 비교 이미지를 사용자에게 보여주고 피드백을 요청한다.
+   - Roborazzi 비교 이미지 (Reference / DIFF / New 3분할)를 제시한다
+   - 차이가 큰 부분을 분석하고 수정이 필요한 부분을 반영한다
 
 ## 규칙
 

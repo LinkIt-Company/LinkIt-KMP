@@ -34,8 +34,8 @@ if [ -z "$FIGMA_TOKEN" ]; then
     exit 1
 fi
 
-GOLDEN_PATH="$MODULE_PATH/build/outputs/roborazzi/${TEST_CLASS}.${TEST_NAME}.png"
-COMPARE_PATH="$MODULE_PATH/build/outputs/roborazzi/${TEST_CLASS}.${TEST_NAME}_compare.png"
+GOLDEN_PATH="screenshots/${MODULE_PATH}/${TEST_CLASS}.${TEST_NAME}.png"
+COMPARE_PATH="screenshots/${MODULE_PATH}/${TEST_CLASS}.${TEST_NAME}_compare.png"
 FIGMA_IMAGE="/tmp/figma_screenshot_$$.png"
 FIGMA_RESIZED="/tmp/figma_screenshot_resized_$$.png"
 
