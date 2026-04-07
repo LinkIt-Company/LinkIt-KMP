@@ -18,6 +18,9 @@ captures
 **/xcshareddata/WorkspaceSettings.xcsettings
 node_modules/
 
+# Figma 비교 스크린샷
+screenshots/compare/
+
 # Claude Code
 .claude/.mcp.json
 .claude/settings.json
