@@ -18,8 +18,8 @@ captures
 **/xcshareddata/WorkspaceSettings.xcsettings
 node_modules/
 
-# Figma 비교 스크린샷
-screenshots/compare/
+# Roborazzi 스크린샷
+screenshots/
 
 # Claude Code
 .claude/.mcp.json

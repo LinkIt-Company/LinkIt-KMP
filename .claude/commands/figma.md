@@ -22,6 +22,8 @@ $ARGUMENTS URL의 Figma 디자인을 Compose UI 코드로 구현한다.
 5. **스크린샷 테스트 작성**: Roborazzi로 시각적 검증을 수행한다.
    - 생성된 화면의 스크린샷 테스트를 `androidUnitTest`에 작성한다
    - `./gradlew :모듈:recordRoborazziDebug`로 골든 이미지를 생성한다
+   - `./gradlew :모듈:compareRoborazziDebug`로 비교 이미지를 생성한다
+   - 골든 이미지와 비교 이미지는 `screenshots/` 폴더에 저장된다
    - Figma 스크린샷과 비교하여 구현 정확도를 시각적으로 확인한다
 
 6. **결과 확인**: 구현 결과를 사용자에게 보여주고 피드백을 요청한다.

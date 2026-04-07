@@ -3,6 +3,7 @@ package com.linkit.company.buildlogic
 import com.android.build.gradle.LibraryExtension
 import com.linkit.company.buildlogic.util.libs
 import com.linkit.company.buildlogic.util.library
+import io.github.takahirom.roborazzi.RoborazziExtension
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
@@ -13,6 +14,13 @@ class KmpScreenshotTestConventionPlugin : Plugin<Project> {
         with(target) {
             with(pluginManager) {
                 apply("io.github.takahirom.roborazzi")
+            }
+
+            extensions.configure<RoborazziExtension> {
+                outputDir.set(rootProject.file("screenshots/${project.path.replace(":", "/")}"))
+                compare {
+                    outputDir.set(rootProject.file("screenshots/${project.path.replace(":", "/")}"))
+                }
             }
 
             extensions.configure<LibraryExtension> {
