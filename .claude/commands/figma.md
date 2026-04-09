@@ -183,24 +183,35 @@ class XxxViewModel(
 
 ### 6. Compose UI 코드 생성
 
-Screen Composable은 **Stateless**로 작성하며, `UiState`와 콜백 람다를 파라미터로 수신한다:
+Screen Composable은 **Stateless**로 작성하며, `UiState`와 콜백 람다를 파라미터로 수신한다.
+또한, 스크린샷 테스트에서 전체 스크롤 콘텐츠를 캡처하기 위해 **Screen과 Content를 분리**한다:
+
+- `XxxContent`: 스크롤/fillMaxSize 없이 순수 콘텐츠만 렌더링하는 `internal` Composable. 스크린샷 테스트에서 사용.
+- `XxxScreen`: `XxxContent`를 스크롤 래퍼 + 오버레이 헤더로 감싸는 실제 화면. Navigation Entry에서 사용.
 
 ```kotlin
+/** 스크롤 없이 전체 콘텐츠를 렌더링. 스크린샷 테스트에서 사용. */
+@Composable
+internal fun XxxContent(
+    uiState: XxxUiState,
+    onAction: (XxxIntent) -> Unit,
+) {
+    Column(modifier = Modifier.fillMaxWidth().background(White)) {
+        // 헤더, 탭, 탭 콘텐츠 등 전체 UI
+    }
+}
+
 @Composable
 fun XxxScreen(
     uiState: XxxUiState,
     onAction: (XxxIntent) -> Unit,
     onBack: () -> Unit = {},
 ) {
-    // UiState 필드에 따른 조건부 렌더링
-    when {
-        uiState.isLoading -> XxxLoadingContent()
-        uiState.errorMessage != null -> XxxErrorContent(
-            message = uiState.errorMessage,
-            onRetry = { onAction(XxxIntent.Retry) }
-        )
-        uiState.items.isEmpty() -> XxxEmptyContent()
-        else -> XxxDefaultContent(uiState = uiState, onAction = onAction)
+    Box(modifier = Modifier.fillMaxSize()) {
+        Column(modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState())) {
+            XxxContent(uiState, onAction)
+        }
+        // 오버레이 헤더 (그라데이션, 앱바 등)
     }
 }
 ```
@@ -253,11 +264,13 @@ fun XxxScreen(
 ### 8. 스크린샷 테스트 작성 — 상태별
 
 Roborazzi로 **상태별 개별 테스트 함수**를 작성한다.
+- **`XxxContent`를 사용**하여 스크롤 없이 전체 콘텐츠를 캡처한다. `XxxScreen`은 `fillMaxSize()`와 `verticalScroll`로 뷰포트 크기로 잘리므로, Figma 전체 프레임과 비교할 수 없다.
+- **뷰포트 높이를 충분히 크게 설정**하여 콘텐츠가 잘리지 않도록 한다 (예: `h5000dp`).
 
 ```kotlin
 @RunWith(RobolectricTestRunner::class)
 @GraphicsMode(GraphicsMode.Mode.NATIVE)
-@Config(sdk = [34], qualifiers = "w375dp-h740dp-xxhdpi", application = Application::class)
+@Config(sdk = [34], qualifiers = "w375dp-h5000dp-xxhdpi", application = Application::class)
 class XxxScreenScreenshotTest {
     @get:Rule val composeRule = createComposeRule()
 
@@ -265,7 +278,7 @@ class XxxScreenScreenshotTest {
     fun xxxScreen_default() {
         composeRule.setContent {
             LinkItTheme {
-                XxxScreen(
+                XxxContent(
                     uiState = XxxUiState(isLoading = false, items = sampleItems, errorMessage = null),
                     onAction = {},
                 )
@@ -278,7 +291,7 @@ class XxxScreenScreenshotTest {
     fun xxxScreen_loading() {
         composeRule.setContent {
             LinkItTheme {
-                XxxScreen(
+                XxxContent(
                     uiState = XxxUiState(isLoading = true, items = emptyList(), errorMessage = null),
                     onAction = {},
                 )

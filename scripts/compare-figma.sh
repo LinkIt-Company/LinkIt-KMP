@@ -88,9 +88,25 @@ if crop_top > 0 or crop_bottom > 0:
     figma = figma.crop((0, crop_top, figma.width, bottom))
     print(f'  Crop: top={crop_top}px, bottom={crop_bottom}px -> {figma.size}')
 
-figma_resized = figma.resize(golden.size, Image.LANCZOS)
+# 너비 기준 비례 리사이즈 (종횡비 유지)
+scale = golden.width / figma.width
+new_h = int(figma.height * scale)
+figma_resized = figma.resize((golden.width, new_h), Image.LANCZOS)
+print(f'  Resize: {figma.size} -> {figma_resized.size} (너비 기준 비례)')
+
+# 높이가 다르면 짧은 쪽에 맞춰 Figma만 crop/pad (골든은 수정하지 않음)
+if abs(figma_resized.height - golden.height) > 2:
+    print(f'  높이 차이: figma={figma_resized.height}px, golden={golden.height}px')
+    if figma_resized.height > golden.height:
+        figma_resized = figma_resized.crop((0, 0, golden.width, golden.height))
+    else:
+        # Figma가 더 짧으면 아래를 흰색으로 패딩
+        padded = Image.new('RGB', (golden.width, golden.height), (255, 255, 255))
+        padded.paste(figma_resized, (0, 0))
+        figma_resized = padded
+    print(f'  조정 후: {figma_resized.size}')
+
 figma_resized.save('$FIGMA_CROPPED')
-print(f'  Resize: {figma.size} -> {figma_resized.size} (골든 이미지 크기)')
 "
 
 # 4. 골든 이미지 백업 + Figma 스크린샷으로 교체
