@@ -8,7 +8,7 @@ $ARGUMENTS URL의 Figma 디자인을 Compose UI 코드로 구현한다.
 
 2. **디자인 토큰 매핑**: `docs/DESIGN_TOKEN_MAPPING.md`를 읽고, Figma 변수를 프로젝트 토큰에 매핑한다.
    - `Color.kt`, `Type.kt`, `Shape.kt`의 기존 토큰을 우선 사용한다
-   - 매핑되지 않는 새 토큰이 있으면 사용자에게 확인 후 토큰 파일에 추가한다
+   - 매핑되지 않는 새 토큰이 있으면 직접 판단하여 토큰 파일에 추가한다
 
 3. **기존 컴포넌트 활용**: `core/designsystem/src/commonMain/kotlin/.../component/` 디렉토리의 기존 컴포넌트를 최대한 활용하여 구현한다.
    - LinkItButton, LinkItTag, LinkItTextField, LinkItTopAppBar, LinkItFilterChip 등
@@ -17,11 +17,11 @@ $ARGUMENTS URL의 Figma 디자인을 Compose UI 코드로 구현한다.
 4. **아이콘 처리**: 디자인에 사용된 아이콘을 Figma에서 가져와 프로젝트에 추가한다.
    - `get_design_context` 결과에서 아이콘 에셋을 식별한다 (data-name 속성에 아이콘 이름이 표시됨)
    - **아이콘 식별 기준**: `<img>` 태그로 렌더링되고, 크기가 작은(24dp 이하) 요소는 아이콘으로 판단한다
-   - **`FIGMA_TOKEN` 사전 확인**: 아이콘이 1개라도 식별되면 즉시 `echo $FIGMA_TOKEN`으로 토큰 존재 여부를 확인한다. 없으면 사용자에게 요청하고, 토큰을 받을 때까지 아이콘 처리를 대기한다.
+   - **`FIGMA_TOKEN` 사전 확인**: 아이콘이 1개라도 식별되면 즉시 `source ~/.zshrc && echo $FIGMA_TOKEN`으로 토큰 존재 여부를 확인한다. 없으면 `~/.zshrc`에서 로드를 재시도한다. 그래도 없으면 Material 아이콘 대체로 진행한다 (사용자에게 묻지 않는다).
    - **아이콘 처리 우선순위** (Figma 원본 다운로드를 기본으로 한다):
      1. **기존 다운로드 확인**: `core/designsystem/src/commonMain/composeResources/drawable/`에 동일 이름(`ic_{아이콘명}.xml`)의 파일이 이미 있으면 그대로 재활용한다.
      2. **Figma에서 SVG 다운로드** (기본 방식): 기존 파일이 없으면 아래 절차로 Figma에서 직접 가져온다.
-     3. **Material 아이콘 대체** (최후 수단): `FIGMA_TOKEN`을 받을 수 없는 경우에만, `get_screenshot`으로 Figma 아이콘 스크린샷을 찍고 Material Icons와 **시각적으로 비교**하여 형태가 동일한 경우에 한해 대체한다. 이름만 같고 형태가 다르면 대체하지 않는다.
+     3. **Material 아이콘 대체** (최후 수단): `FIGMA_TOKEN`이 없는 경우에만, `get_screenshot`으로 Figma 아이콘 스크린샷을 찍고 Material Icons와 **시각적으로 비교**하여 형태가 동일한 경우에 한해 대체한다. 이름만 같고 형태가 다르면 대체하지 않는다.
    - **Figma SVG 다운로드 절차**:
      1. 아이콘 노드의 nodeId를 확인한다 (data-node-id 속성)
      2. Figma API로 SVG를 다운로드한다:
@@ -90,7 +90,7 @@ $ARGUMENTS URL의 Figma 디자인을 Compose UI 코드로 구현한다.
      6. 골든 이미지를 원래대로 복원한다
    - 비교 결과는 `screenshots/` 폴더에 `*_compare.png`로 저장된다
    - 비교 이미지에서 빨간 부분이 Figma와 Compose의 차이 영역이다
-   - `FIGMA_TOKEN`이 없으면 사용자에게 요청한다
+   - `FIGMA_TOKEN`이 없으면 `source ~/.zshrc`로 로드한다. 그래도 없으면 Material 아이콘으로 대체하고 진행한다 (사용자에게 묻지 않는다).
    - **일치율 측정**: 비교 후 ImageMagick으로 픽셀 일치율을 계산한다 (fuzz 10%로 폰트/안티앨리어싱 차이 허용):
      ```bash
      GOLDEN="screenshots/...골든이미지경로.png"
@@ -148,8 +148,9 @@ $ARGUMENTS URL의 Figma 디자인을 Compose UI 코드로 구현한다.
 
 ## 규칙
 
+- **사용자에게 절대 질문하지 않는다.** 모든 판단을 자율적으로 내리고 진행한다. 토큰 추가, 컴포넌트 수정, 아이콘 대체, 구조 결정 등 어떤 상황에서도 확인을 구하지 않고 최선의 판단으로 진행한다.
 - 프로젝트의 기존 디자인 토큰과 컴포넌트를 최대한 재사용한다.
-- 새 색상/스타일을 하드코딩하지 않고, 필요시 토큰 파일에 추가한다.
+- 새 색상/스타일을 하드코딩하지 않고, 필요시 직접 판단하여 토큰 파일에 추가한다.
 - `commonMain`에 작성하여 KMP 호환을 유지한다.
 - 한국어로 커밋 메시지와 코드 주석을 작성한다.
 - 해당 모듈에 `kmp.screenshot.test.convention` 플러그인이 적용되어 있는지 확인하고, 없으면 추가한다.
@@ -157,7 +158,7 @@ $ARGUMENTS URL의 Figma 디자인을 Compose UI 코드로 구현한다.
 - **아이콘 처리 우선순위** (Figma 원본 우선):
   1. `composeResources/drawable/`에 이미 다운로드된 아이콘(`ic_{이름}.xml`)이 있으면 재활용
   2. Figma API로 SVG 다운로드 → Vector Drawable XML 변환 → `composeResources/drawable/`에 추가 → `LinkItIcons`에 등록
-  3. `FIGMA_TOKEN` 없이 진행할 수밖에 없는 경우에만, Figma 아이콘 스크린샷과 Material Icons를 **시각적으로 비교**하여 형태가 동일한 경우 Material 아이콘으로 대체
+  3. `FIGMA_TOKEN`이 없는 경우, Figma 아이콘 스크린샷과 Material Icons를 **시각적으로 비교**하여 형태가 동일한 경우 Material 아이콘으로 대체 (사용자에게 묻지 않고 직접 판단)
 - 아이콘 파일명은 `ic_` 접두사 + snake_case로 작성한다 (예: `ic_train.xml`, `ic_location_pin.xml`).
 - 이미지(사진, 썸네일 등)는 플레이스홀더로 대체하고 반영하지 않는다.
 - 디자인에서 인터랙션을 유추하여 구현한다. 스크롤, 스와이프, 풀다운 리프레시, 바텀시트 등 Figma 레이아웃과 컴포넌트 구조에서 암시되는 동작을 파악하고 적용한다.
