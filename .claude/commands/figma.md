@@ -14,20 +14,59 @@ $ARGUMENTS URL의 Figma 디자인을 Compose UI 코드로 구현한다.
    - LinkItButton, LinkItTag, LinkItTextField, LinkItTopAppBar, LinkItFilterChip 등
    - 새 컴포넌트가 필요한 경우 기존 컴포넌트 패턴을 따라 작성한다
 
-4. **Compose UI 코드 생성**: 디자인에 맞는 Compose 코드를 작성한다.
+4. **아이콘 처리**: 디자인에 사용된 아이콘을 Figma에서 가져와 프로젝트에 추가한다.
+   - `get_design_context` 결과에서 아이콘 에셋을 식별한다 (data-name 속성에 아이콘 이름이 표시됨)
+   - **아이콘 식별 기준**: `<img>` 태그로 렌더링되고, 크기가 작은(24dp 이하) 요소는 아이콘으로 판단한다
+   - **Material 아이콘 매칭 우선**: 아이콘의 이름/형태가 Material Icons와 일치하면 `LinkItIcons`에 등록하여 사용한다
+   - **Figma에서 직접 가져오기**: Material 아이콘에 없는 커스텀 아이콘은 다음 절차로 가져온다:
+     1. 아이콘 노드의 nodeId를 확인한다 (data-node-id 속성)
+     2. `get_screenshot`으로 개별 아이콘 노드의 스크린샷을 가져온다
+     3. Figma API로 SVG를 다운로드한다:
+        ```
+        curl -s -H "X-Figma-Token: $FIGMA_TOKEN" \
+          "https://api.figma.com/v1/images/{fileKey}?ids={nodeId}&format=svg" \
+          | python3 -c "import sys,json; print(list(json.load(sys.stdin)['images'].values())[0])"
+        ```
+        반환된 URL에서 SVG 파일을 다운로드한다.
+     4. SVG를 Android Vector Drawable XML로 변환한다:
+        ```
+        python3 scripts/svg2vector.py input.svg output.xml
+        ```
+        스크립트가 없으면 수동으로 변환하거나, 간단한 아이콘은 path 데이터를 직접 추출한다.
+     5. 변환된 XML을 `core/designsystem/src/commonMain/composeResources/drawable/` 에 `ic_{아이콘명}.xml`로 저장한다
+     6. `LinkItIcons`에 Compose Resource로 등록한다:
+        ```kotlin
+        val CustomIcon: DrawableResource get() = Res.drawable.ic_custom_icon
+        ```
+   - `FIGMA_TOKEN`이 없으면 사용자에게 요청한다. 토큰 없이는 Material 아이콘 대체만 가능하다.
+   - 이미지(사진, 썸네일 등)는 아이콘이 아니므로 플레이스홀더로 대체한다.
+
+5. **Compose UI 코드 생성**: 디자인에 맞는 Compose 코드를 작성한다.
    - `LinkItTheme` 내에서 구현한다
    - `commonMain`에 배치하여 KMP 호환을 유지한다
    - `@Preview` 함수도 `androidMain`에 함께 생성한다
 
-5. **스크린샷 테스트 작성**: Roborazzi로 Compose 렌더링 골든 이미지를 생성한다.
+6. **스크린샷 테스트 작성**: Roborazzi로 Compose 렌더링 골든 이미지를 생성한다.
    - 생성된 화면의 스크린샷 테스트를 `androidUnitTest`에 작성한다
    - `createComposeRule()` + `onRoot().captureRoboImage()`로 Composable만 캡처한다
    - 테스트 화면 크기는 Figma 프레임에서 system chrome을 제외한 콘텐츠 영역으로 설정한다
      - 예: Figma 375×812dp, status bar 38dp, home indicator 34dp → `w375dp-h740dp-xxhdpi`
    - `./gradlew :모듈:recordRoborazziDebug`로 골든 이미지를 생성한다
    - 골든 이미지는 `screenshots/` 폴더에 저장된다
+   - feature 모듈에서 Metro DI 관련 `MetroAppComponentFactory` 오류가 발생하면:
+     - `src/androidUnitTest/AndroidManifest.xml`을 생성하여 오버라이드한다:
+       ```xml
+       <?xml version="1.0" encoding="utf-8"?>
+       <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+           xmlns:tools="http://schemas.android.com/tools">
+           <application
+               android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+               tools:replace="android:appComponentFactory" />
+       </manifest>
+       ```
+     - `@Config`에 `application = Application::class`를 추가한다
 
-6. **Figma 스크린샷 비교**: `scripts/compare-figma.sh`로 Figma 원본과 Compose 렌더링을 픽셀 비교한다.
+7. **Figma 스크린샷 비교**: `scripts/compare-figma.sh`로 Figma 원본과 Compose 렌더링을 픽셀 비교한다.
    - 사전 조건: `FIGMA_TOKEN` 환경변수 설정 필요 (Figma Personal Access Token)
    - URL에서 추출한 fileKey와 nodeId를 사용한다
    - Figma의 status bar / home indicator 높이(dp)를 crop 파라미터로 전달한다
@@ -46,11 +85,24 @@ $ARGUMENTS URL의 Figma 디자인을 Compose UI 코드로 구현한다.
    - 비교 이미지에서 빨간 부분이 Figma와 Compose의 차이 영역이다
    - `FIGMA_TOKEN`이 없으면 사용자에게 요청한다
 
-7. **반복 수정**: 비교 이미지를 분석하고, 수정 가능한 차이가 없을 때까지 구현을 반복 수정한다.
+8. **반복 수정**: 비교 이미지를 분석하고, 수정 가능한 차이가 없을 때까지 구현을 반복 수정한다.
    - 비교 이미지(Reference / DIFF / New 3분할)를 읽고 차이 영역을 분석한다
    - 다음 기준으로 수정 가능 여부를 판단한다:
      - **수정 가능**: 여백(padding/margin), 크기, 색상, 폰트, 정렬, 간격, 모서리 둥글기 등 코드로 조정 가능한 차이
      - **수정 불가**: 플레이스홀더로 대체한 이미지/사진 영역, 플랫폼별 렌더링 차이(안티앨리어싱 등), 시스템 UI 차이
+   - **간격/여백 또는 글자 크기 차이 발견 시 Figma 원본 값 검증**:
+     diff에서 간격(padding, margin, gap, spacing)이나 글자 크기/스타일이 다르게 보이면, 감으로 수정하지 말고 반드시 Figma 원본 값을 확인한다.
+     1. 1단계에서 받아둔 `get_design_context` 결과의 HTML/Tailwind 코드를 다시 참조한다.
+        해당 영역의 `data-node-id`로 노드를 찾고, CSS 클래스에서 정확한 값을 읽는다.
+        - 간격: `p-[17px]` → 17dp, `gap-[8px]` → 8dp, `px-[24px]` → horizontal 24dp
+        - 글자 크기: `text-[16px]` → 16sp, `text-[12px]` → 12sp
+        - 행간: `leading-[24px]` → lineHeight 24sp, `leading-[1.35]` → lineHeight = fontSize × 1.35
+        - 자간: `tracking-[0.5px]` → letterSpacing 0.5sp
+        - 굵기: `font-['...:Bold']` → FontWeight.Bold, `'...:ExtraBold'` → FontWeight.ExtraBold
+     2. 확인된 Figma 값을 `docs/DESIGN_TOKEN_MAPPING.md`의 Typography 토큰과 대조한다.
+        일치하는 `LinkItTextStyle.*`이 있으면 해당 토큰을 사용하고, 없으면 새 토큰 추가를 검토한다.
+     3. 값이 불명확하거나 더 정밀한 정보가 필요하면, 해당 노드의 nodeId로 `get_design_context`를 다시 호출하여 세부 레이아웃을 확인한다.
+     4. 확인된 Figma 값과 현재 Compose 코드의 값을 대조하여, 차이가 있는 부분만 정확히 수정한다.
    - 수정 가능한 차이가 있으면:
      1. 차이 원인을 분석하고 Compose 코드를 수정한다
      2. `recordRoborazziDebug`로 골든 이미지를 재생성한다
@@ -58,7 +110,7 @@ $ARGUMENTS URL의 Figma 디자인을 Compose UI 코드로 구현한다.
      4. 비교 이미지를 다시 분석한다
    - 수정 가능한 차이가 없을 때 반복을 종료한다
 
-8. **결과 보고**: 반복 수정이 완료되면 최종 결과를 보고한다.
+9. **결과 보고**: 반복 수정이 완료되면 최종 결과를 보고한다.
    - 최종 Roborazzi 비교 이미지 (Reference / DIFF / New 3분할)를 제시한다
    - 반복 수정 과정에서 변경한 내용을 요약한다
    - 남아있는 수정 불가 차이가 있으면 사유와 함께 안내한다
@@ -71,5 +123,10 @@ $ARGUMENTS URL의 Figma 디자인을 Compose UI 코드로 구현한다.
 - 한국어로 커밋 메시지와 코드 주석을 작성한다.
 - 해당 모듈에 `kmp.screenshot.test.convention` 플러그인이 적용되어 있는지 확인하고, 없으면 추가한다.
 - 반복되는 UI 패턴은 재사용 가능한 Composable로 추출한다. 화면 내에서 2회 이상 등장하거나 다른 화면에서도 쓸 수 있는 구조라면 `core/designsystem/component/`에 공통 컴포넌트로 분리한다.
-- 아이콘은 Figma에서 에셋 URL을 다운로드하여 프로젝트 리소스에 추가하거나, `LinkItIcons`에 Material 아이콘을 등록하여 사용한다. 이미지(사진, 썸네일 등)는 플레이스홀더로 대체하고 반영하지 않는다.
+- **아이콘 처리 우선순위**:
+  1. `LinkItIcons`에 이미 등록된 Material 아이콘 확인
+  2. Material Icons Extended에서 매칭되는 아이콘 검색 후 `LinkItIcons`에 등록
+  3. 매칭 불가 시 Figma API로 SVG 다운로드 → Vector Drawable XML 변환 → `composeResources/drawable/`에 추가
+- 아이콘 파일명은 `ic_` 접두사 + snake_case로 작성한다 (예: `ic_train.xml`, `ic_location_pin.xml`).
+- 이미지(사진, 썸네일 등)는 플레이스홀더로 대체하고 반영하지 않는다.
 - 디자인에서 인터랙션을 유추하여 구현한다. 스크롤, 스와이프, 풀다운 리프레시, 바텀시트 등 Figma 레이아웃과 컴포넌트 구조에서 암시되는 동작을 파악하고 적용한다.
