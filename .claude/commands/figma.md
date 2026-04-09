@@ -175,7 +175,11 @@ class XxxViewModel(
 
 - Metro DI 어노테이션 필수: `@AssistedInject`, `@AssistedFactory`, `@ViewModelAssistedFactoryKey`, `@ContributesIntoMap(AppScope::class)`
 - 실제 데이터 로직(Repository/UseCase 호출)은 `// TODO` 주석으로 남긴다
-- feature 모듈의 `build.gradle.kts`에 Metro 관련 의존성이 있는지 확인하고, 없으면 추가한다
+- **Metro DI 설정 확인** (빠지면 런타임 크래시 발생):
+  1. **feature 모듈 `build.gradle.kts`**: `commonMain`에 `libs.metrox.viewmodel`, `libs.metrox.viewmodel.compose` 의존성이 있는지 확인하고, 없으면 추가한다. `androidMain`에 `libs.metrox.android`, `libs.metrox.viewmodel` 의존성도 확인한다.
+  2. **호스트 Activity (예: HomeActivity)**: `setContent` 블록에서 `CompositionLocalProvider(LocalMetroViewModelFactory provides viewModelFactory)`로 factory를 제공하는지 확인한다. 이것이 없으면 Navigation3 서브 라우트의 `assistedMetroViewModel()` 호출 시 `No MetroViewModelFactory registered` 에러가 발생한다. 누락되어 있으면 추가한다.
+  3. **호스트 모듈 `build.gradle.kts`**: `androidMain`에 `libs.metrox.viewmodel` 의존성이 있는지 확인한다 (`LocalMetroViewModelFactory` import에 필요).
+  4. **`app-android/build.gradle.kts`**: ViewModel이 있는 feature 모듈을 `implementation(project(":feature:xxx"))`로 직접 의존하는지 확인한다. Metro `@ContributesIntoMap`으로 등록된 ViewModel Factory는 `@DependencyGraph`가 있는 `app-android` 모듈에서 직접 의존해야 자동 수집된다. 누락 시 `Unknown model class` 런타임 에러 발생.
 
 ### 6. Compose UI 코드 생성
 
