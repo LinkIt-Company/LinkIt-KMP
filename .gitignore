@@ -24,3 +24,6 @@ screenshots/
 # Claude Code
 .claude/.mcp.json
 .claude/settings.json
+
+# Figma workspace
+.figma-workspace/
