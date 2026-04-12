@@ -41,15 +41,13 @@ fun LinkItVideoCard(
             .clickable(onClick = onClick),
         verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
-        Box {
-            Box(
-                modifier = Modifier
-                    .width(160.dp)
-                    .height(90.dp)
-                    .clip(LinkItShape.input),
-            ) {
-                thumbnail()
-            }
+        Box(
+            modifier = Modifier
+                .width(160.dp)
+                .height(90.dp)
+                .clip(LinkItShape.input),
+        ) {
+            thumbnail()
             if (onCopyLinkClick != null) {
                 Box(
                     modifier = Modifier
