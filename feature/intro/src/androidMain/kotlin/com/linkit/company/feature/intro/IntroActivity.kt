@@ -1,13 +1,13 @@
 package com.linkit.company.feature.intro
 
-import android.content.Intent
+import android.app.Activity
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.lifecycle.ViewModelProvider
 import com.linkit.company.core.common.extension.enableEdgeToEdgeConfig
 import com.linkit.company.core.designsystem.theme.LinkItTheme
-import android.app.Activity
+import com.linkit.company.core.navigation.navigator.feature.HomeNavigator
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesIntoMap
 import dev.zacsweers.metro.Inject
@@ -20,6 +20,7 @@ import dev.zacsweers.metrox.viewmodel.MetroViewModelFactory
 @Inject
 class IntroActivity(
     private val viewModelFactory: MetroViewModelFactory,
+    private val homeNavigator: HomeNavigator,
 ) : ComponentActivity() {
 
     override val defaultViewModelProviderFactory: ViewModelProvider.Factory
@@ -33,12 +34,7 @@ class IntroActivity(
             LinkItTheme {
                 IntroScreen(
                     onNavigateToHome = {
-                        startActivity(
-                            Intent().setClassName(
-                                packageName,
-                                "com.linkit.company.feature.home.HomeActivity",
-                            )
-                        )
+                        homeNavigator.navigate(this@IntroActivity)
                         finish()
                     },
                 )

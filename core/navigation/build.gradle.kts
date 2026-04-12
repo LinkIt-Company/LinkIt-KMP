@@ -14,5 +14,8 @@ kotlin {
             implementation(libs.bundles.jetbrainsNavigation3)
             implementation(libs.kotlinx.serialization.core)
         }
+        androidMain.dependencies {
+            implementation(libs.androidx.activity.compose)
+        }
     }
 }

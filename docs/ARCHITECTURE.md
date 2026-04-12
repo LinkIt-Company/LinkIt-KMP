@@ -1,11 +1,12 @@
 # LinkIt-KMP Architecture
 
-> 최종 업데이트: 2026-04-03
+> 최종 업데이트: 2026-04-06
 
 ## 변경 이력
 
 | 날짜 | 내용 |
 |------|------|
+| 2026-04-06 | Feature 모듈 간 Navigator 패턴 추가 (이슈 #21) |
 | 2026-04-03 | 멀티 액티비티 구조, Navigation3 멀티 백스택, Metro DI ViewModel 연동 반영 |
 
 ---
@@ -96,8 +97,42 @@ feature:map, feature:storage, feature:explore, feature:schedule, feature:intro
 
 - Activity는 각 feature 모듈의 `androidMain`에 위치
 - ViewController는 각 feature 모듈의 `iosMain`에 위치
-- Activity 간 이동은 `Intent`를 통해 수행
+- Activity 간 이동은 Navigator 패턴을 통해 수행 (아래 섹션 참고)
 - Activity는 Metro DI를 통해 생성자 주입 (`@ActivityKey` + `@Inject`)
+
+### Navigator 패턴 (Android)
+
+Feature 모듈 간 순환참조 없이 Activity 전환을 수행하는 패턴입니다.
+
+```
+core:navigation/androidMain/navigator/
+├── Navigator              ← base interface (navigate, navigateWithLauncher)
+└── feature/
+    ├── HomeNavigator      ← interface : Navigator (마커)
+    └── ScheduleNavigator  ← interface : Navigator (마커)
+
+feature:home/androidMain/navigator/
+└── HomeNavigatorImpl      ← HomeNavigator 구현 (HomeActivity 직접 참조)
+
+feature:schedule/androidMain/navigator/
+└── ScheduleNavigatorImpl  ← ScheduleNavigator 구현 (ScheduleActivity 직접 참조)
+```
+
+- **인터페이스**는 `core:navigation`에 정의 → 모든 feature 모듈에서 의존 가능
+- **구현체**는 각 feature 모듈에 배치 → 자신의 Activity 클래스를 직접 참조 (문자열 기반 Intent 불필요)
+- **DI 바인딩**: `@ContributesBinding(AppScope::class)`으로 Metro가 자동 수집
+- **사용**: Activity 생성자에 Navigator를 주입받아 사용
+
+```kotlin
+// IntroActivity에서 HomeNavigator를 주입받아 HomeActivity로 이동
+@Inject
+class IntroActivity(
+    private val viewModelFactory: MetroViewModelFactory,
+    private val homeNavigator: HomeNavigator,
+) : ComponentActivity()
+```
+
+> iOS에서는 Navigator 패턴 대신 ViewController 함수의 콜백 람다 파라미터로 화면 전환을 처리합니다.
 
 ---
 
