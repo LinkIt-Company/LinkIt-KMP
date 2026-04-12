@@ -15,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.graphics.Color
 import com.linkit.company.core.designsystem.icon.LinkItIcons
 import com.linkit.company.core.designsystem.theme.Black
 import com.linkit.company.core.designsystem.theme.ChipBackground
@@ -24,6 +25,18 @@ import com.linkit.company.core.designsystem.theme.PrimaryBlue
 import com.linkit.company.core.designsystem.theme.PrimaryBlueBackground
 import com.linkit.company.core.designsystem.theme.PrimaryBlueBorder
 
+object FilterChipDefaults {
+    fun containerColor(selected: Boolean): Color =
+        if (selected) PrimaryBlueBackground else ChipBackground
+
+    fun contentColor(selected: Boolean): Color =
+        if (selected) PrimaryBlue else Black
+
+    fun borderModifier(selected: Boolean): Modifier =
+        if (selected) Modifier.border(1.dp, PrimaryBlueBorder, LinkItShape.pill)
+        else Modifier
+}
+
 @Composable
 fun LinkItFilterChip(
     label: String,
@@ -32,18 +45,14 @@ fun LinkItFilterChip(
     selected: Boolean = false,
     leadingIcon: @Composable (() -> Unit)? = null,
 ) {
-    val backgroundColor = if (selected) PrimaryBlueBackground else ChipBackground
-    val textColor = if (selected) PrimaryBlue else Black
+    val contentColor = FilterChipDefaults.contentColor(selected)
 
     Row(
         modifier = modifier
             .height(34.dp)
             .clip(LinkItShape.pill)
-            .background(backgroundColor)
-            .then(
-                if (selected) Modifier.border(1.dp, PrimaryBlueBorder, LinkItShape.pill)
-                else Modifier,
-            )
+            .background(FilterChipDefaults.containerColor(selected))
+            .then(FilterChipDefaults.borderModifier(selected))
             .clickable(onClick = onClick)
             .padding(start = 12.dp, end = 14.dp),
         verticalAlignment = Alignment.CenterVertically,
@@ -53,13 +62,13 @@ fun LinkItFilterChip(
         Text(
             text = label,
             style = LinkItTextStyle.chipLabel,
-            color = textColor,
+            color = contentColor,
         )
         Icon(
             imageVector = LinkItIcons.ChevronDown,
             contentDescription = null,
             modifier = Modifier.size(16.dp),
-            tint = textColor,
+            tint = contentColor,
         )
     }
 }
