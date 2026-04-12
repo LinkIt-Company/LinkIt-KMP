@@ -15,7 +15,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -24,6 +23,8 @@ import com.linkit.company.core.designsystem.theme.Black
 import com.linkit.company.core.designsystem.theme.LinkItFontFamily
 import com.linkit.company.core.designsystem.theme.LinkItShape
 import com.linkit.company.core.designsystem.theme.LinkItTextStyle
+import com.linkit.company.core.designsystem.theme.OverlayDark
+import com.linkit.company.core.designsystem.theme.TextSecondary
 import com.linkit.company.core.designsystem.theme.White
 
 @Composable
@@ -54,7 +55,7 @@ fun LinkItVideoCard(
                         .align(Alignment.BottomEnd)
                         .padding(end = 8.dp, bottom = 8.dp)
                         .background(
-                            color = Color(0x66000000),
+                            color = OverlayDark,
                             shape = LinkItShape.tag,
                         )
                         .clickable(onClick = onCopyLinkClick)
@@ -84,7 +85,7 @@ fun LinkItVideoCard(
             Text(
                 text = viewCount,
                 style = LinkItTextStyle.small,
-                color = Color(0xB3000000),
+                color = TextSecondary,
             )
         }
     }

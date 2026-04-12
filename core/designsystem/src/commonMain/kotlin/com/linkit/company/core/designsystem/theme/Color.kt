@@ -50,3 +50,7 @@ val CardBorder = Color(0xFFF1F5F9)
 
 // Border
 val BorderDefault = Color(0xFFEBEBEB)
+
+// Overlay & Alpha
+val OverlayDark = Color(0x66000000)
+val TextSecondary = Color(0xB3000000)
