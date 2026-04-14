@@ -18,6 +18,12 @@ captures
 **/xcshareddata/WorkspaceSettings.xcsettings
 node_modules/
 
+# Roborazzi 스크린샷
+screenshots/
+
 # Claude Code
 .claude/.mcp.json
 .claude/settings.json
+
+# Figma workspace
+.figma-workspace/
