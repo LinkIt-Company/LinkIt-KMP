@@ -63,3 +63,14 @@ main          ← 최상위 (릴리스)
 - Navigation 관련 코드를 수정하거나 새 Route를 추가할 때
 - NavigationState, LinkItNavigator, LinkItNavDisplay 관련 작업을 할 때
 - 화면 전환 흐름에 대한 질문을 받았을 때
+
+### docs/DESIGN_TOKEN_MAPPING.md
+아래 상황에서 반드시 읽고 참고할 것:
+- Figma 디자인을 Compose 코드로 구현할 때
+- 새 디자인 토큰을 추가할 때
+
+### docs/COMPOSE_IMPLEMENTATION_GUIDE.md
+아래 상황에서 반드시 읽고 참고할 것:
+- Figma 디자인을 Compose 코드로 구현할 때
+- 새 UI 컴포넌트를 작성할 때
+- 스크린샷 테스트를 추가할 때
