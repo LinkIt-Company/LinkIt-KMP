@@ -18,7 +18,7 @@ set -euo pipefail
 # ── 설정 ──
 CLAUDE_CMD="${CLAUDE_CMD:-npx -y @anthropic-ai/claude-code}"
 WORKSPACE=".figma-workspace"
-COMMANDS_DIR=".claude/commands"
+COMMANDS_DIR="scripts/figma-prompts"
 MAX_ITER=20
 
 # ── 파라미터 파싱 ──
