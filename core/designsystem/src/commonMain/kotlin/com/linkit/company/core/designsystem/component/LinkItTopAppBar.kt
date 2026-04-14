@@ -20,7 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.linkit.company.core.designsystem.icon.LinkItIcons
 import com.linkit.company.core.designsystem.theme.HeaderText
-import com.linkit.company.core.designsystem.theme.LinkItTypography
+import com.linkit.company.core.designsystem.theme.LinkItTextStyle
 import com.linkit.company.core.designsystem.theme.White
 
 @Composable
@@ -57,7 +57,7 @@ fun LinkItTopAppBar(
             }
             Text(
                 text = title,
-                style = LinkItTypography.headlineMedium,
+                style = LinkItTextStyle.heading,
                 color = HeaderText,
                 modifier = Modifier.weight(1f),
             )
