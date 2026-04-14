@@ -16,6 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.graphics.Color
 import com.linkit.company.core.designsystem.theme.Black
 import com.linkit.company.core.designsystem.theme.G1
 import com.linkit.company.core.designsystem.theme.G4
@@ -23,6 +24,15 @@ import com.linkit.company.core.designsystem.theme.G6
 import com.linkit.company.core.designsystem.theme.LinkItShape
 import com.linkit.company.core.designsystem.theme.LinkItTextStyle
 import com.linkit.company.core.designsystem.theme.TagRedText
+
+object LinkItTextFieldDefaults {
+    fun borderColor(isError: Boolean): Color =
+        if (isError) TagRedText else G1
+
+    fun borderModifier(isError: Boolean): Modifier =
+        if (isError) Modifier.border(1.dp, borderColor(isError), LinkItShape.input)
+        else Modifier
+}
 
 @Composable
 fun LinkItTextField(
@@ -47,13 +57,6 @@ fun LinkItTextField(
             Spacer(modifier = Modifier.height(8.dp))
         }
 
-        val borderColor = if (isError) TagRedText else G1
-        val borderModifier = if (isError) {
-            Modifier.border(1.dp, borderColor, LinkItShape.input)
-        } else {
-            Modifier
-        }
-
         BasicTextField(
             value = value,
             onValueChange = { newValue ->
@@ -69,7 +72,7 @@ fun LinkItTextField(
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .then(borderModifier)
+                        .then(LinkItTextFieldDefaults.borderModifier(isError))
                         .background(G1, LinkItShape.input)
                         .height(minHeight.dp)
                         .padding(horizontal = 12.dp, vertical = 16.dp),

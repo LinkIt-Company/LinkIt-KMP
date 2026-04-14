@@ -1,11 +1,12 @@
 # Navigation3 구조 정리
 
-> 최종 업데이트: 2026-04-03
+> 최종 업데이트: 2026-04-06
 
 ## 변경 이력
 
 | 날짜 | 내용 |
 |------|------|
+| 2026-04-06 | Navigator 패턴 추가 (이슈 #21): Feature 모듈 간 Activity 전환 추상화 |
 | 2026-04-03 | 멀티 백스택 구조, 멀티 액티비티 구조, Entry Provider 패턴 반영 |
 
 ---
@@ -103,7 +104,9 @@ Activity 레벨 (Intent로 전환)
         └── (확장 가능)
 ```
 
-### Activity 간 전환
+### Activity 간 전환 (Navigator 패턴)
+
+Feature 모듈 간 순환참조 없이 Activity 전환을 수행합니다.
 
 ```mermaid
 graph LR
@@ -111,10 +114,14 @@ graph LR
     Home["HomeActivity"]
     Schedule["ScheduleActivity"]
 
-    Intro -->|"Intent + finish()"| Home
-    Home -->|"Intent"| Schedule
+    Intro -->|"HomeNavigator.navigate()"| Home
+    Home -->|"ScheduleNavigator.navigate()"| Schedule
     Schedule -->|"finish()"| Home
 ```
+
+- `IntroActivity`는 `HomeNavigator`를 Metro DI로 주입받아 `HomeActivity`로 전환
+- `HomeActivity`는 `ScheduleNavigator`를 Metro DI로 주입받아 `ScheduleActivity`로 전환
+- `ScheduleActivity`는 `finish()`로 직접 종료하여 `HomeActivity`로 복귀
 
 ### HomeActivity 내부 탭 전환
 
@@ -180,6 +187,9 @@ graph TB
 | `core/navigation/.../NavigationState.kt` | 멀티 백스택 상태 관리 + `rememberNavigationState()` + `toDecoratedEntries()` |
 | `core/navigation/.../LinkItNavigator.kt` | 탭 전환 / 탭 내 push / back 처리 |
 | `core/navigation/.../LinkItNavDisplay.kt` | NavDisplay 래퍼 + `LocalLinkItNavigator` |
+| `core/navigation/.../navigator/Navigator.kt` | Activity 전환 base interface (Android) |
+| `core/navigation/.../navigator/feature/*.kt` | Feature별 Navigator 마커 인터페이스 (Android) |
+| `feature/*/navigator/*NavigatorImpl.kt` | Navigator 구현체 (Android, Activity 직접 참조) |
 | `feature/home/.../navigation/HomeNavDisplay.kt` | Scaffold + BottomNav + entryProvider 조립 |
 | `feature/home/.../navigation/TopLevelRoutes.kt` | 탭 정의 (Map, Storage, Explore) |
 | `feature/*/navigation/*Entry.kt` | 각 feature의 Route → Screen 매핑 |
@@ -310,6 +320,67 @@ val entryProvider = entryProvider {
 ```
 
 Screen Composable은 Navigation에 대한 직접 의존 없이 **콜백 람다**만 수신합니다.
+
+---
+
+## Navigator 패턴 (Android Activity 전환)
+
+Feature 모듈 간 순환참조 없이 Activity 전환을 수행하는 패턴입니다.
+
+### 구조
+
+```mermaid
+graph TB
+    subgraph ":core:navigation (androidMain)"
+        Navigator["Navigator<br/>(base interface)"]
+        HomeNav["HomeNavigator : Navigator"]
+        ScheduleNav["ScheduleNavigator : Navigator"]
+    end
+
+    subgraph ":feature:home (androidMain)"
+        HomeImpl["HomeNavigatorImpl<br/>@ContributesBinding"]
+    end
+
+    subgraph ":feature:schedule (androidMain)"
+        ScheduleImpl["ScheduleNavigatorImpl<br/>@ContributesBinding"]
+    end
+
+    HomeImpl -->|implements| HomeNav
+    ScheduleImpl -->|implements| ScheduleNav
+    HomeNav -->|extends| Navigator
+    ScheduleNav -->|extends| Navigator
+```
+
+- **인터페이스**: `core:navigation/androidMain`에 정의 → 모든 feature 모듈에서 의존 가능
+- **구현체**: 각 feature 모듈의 `androidMain`에 배치 → Activity 클래스를 직접 참조
+- **DI**: `@ContributesBinding(AppScope::class)`으로 Metro가 자동 수집
+- **iOS**: Navigator 패턴 대신 ViewController 함수의 콜백 람다 파라미터로 처리
+
+### Navigator API
+
+```kotlin
+interface Navigator {
+    fun navigate(
+        activity: ComponentActivity,
+        intentBuilder: (Intent.() -> Intent)? = null,
+    )
+
+    fun navigateWithLauncher(
+        activity: ComponentActivity,
+        intentBuilder: (Intent.() -> Intent)? = null,
+        launcher: ActivityResultLauncher<Intent>?,
+    )
+}
+```
+
+### 새 Navigator 추가 체크리스트
+
+1. `core:navigation/androidMain/navigator/feature/`에 `XxxNavigator` 마커 인터페이스 생성
+2. `feature:xxx/androidMain/navigator/`에 `XxxNavigatorImpl` 구현체 생성
+   - `@ContributesBinding(AppScope::class)` + `@Inject` 어노테이션 추가
+   - `navigateWithLauncher()`에서 자신의 Activity 클래스를 직접 참조
+3. 호출 측 Activity 생성자에 Navigator를 주입 파라미터로 추가
+4. `AndroidManifest.xml`에 타겟 Activity 등록 확인
 
 ---
 

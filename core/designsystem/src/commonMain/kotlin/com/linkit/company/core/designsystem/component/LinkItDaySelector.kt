@@ -26,9 +26,41 @@ import com.linkit.company.core.designsystem.theme.PrimaryBlueBackground
 import com.linkit.company.core.designsystem.theme.PrimaryBlueBorder
 import com.linkit.company.core.designsystem.theme.Slate500
 import com.linkit.company.core.designsystem.theme.White
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+
+object DaySelectorDefaults {
+    fun backgroundColor(isSelected: Boolean): Color =
+        if (isSelected) PrimaryBlueBackground else White
+
+    fun borderColor(isSelected: Boolean): Color =
+        if (isSelected) PrimaryBlueBorder else BorderDefault
+
+    fun dayLabelColor(isSelected: Boolean): Color =
+        if (isSelected) PrimaryBlueBorder else Slate500
+
+    fun dayNumberColor(isSelected: Boolean): Color =
+        if (isSelected) PrimaryBlue else Black
+
+    const val DisabledAlpha = 0.3f
+
+    val dayLabelStyle = TextStyle(
+        fontFamily = LinkItFontFamily,
+        fontWeight = FontWeight.Bold,
+        fontSize = 10.sp,
+        lineHeight = 13.5.sp,
+    )
+
+    val dayNumberStyle = TextStyle(
+        fontFamily = LinkItFontFamily,
+        fontWeight = FontWeight.ExtraBold,
+        fontSize = 16.sp,
+        lineHeight = 21.6.sp,
+        textAlign = TextAlign.Center,
+    )
+}
 
 @Composable
 fun LinkItDaySelector(
@@ -46,54 +78,27 @@ fun LinkItDaySelector(
         itemsIndexed(List(totalDays) { it + 1 }) { _, day ->
             val isSelected = day == selectedDay
             val isDisabled = day > availableDays
-            val backgroundColor = when {
-                isSelected -> PrimaryBlueBackground
-                else -> White
-            }
-            val borderColor = when {
-                isSelected -> PrimaryBlueBorder
-                else -> BorderDefault
-            }
-            val dayLabelColor = when {
-                isSelected -> PrimaryBlueBorder
-                else -> Slate500
-            }
-            val dayNumberColor = when {
-                isSelected -> PrimaryBlue
-                else -> Black
-            }
 
             Column(
                 modifier = Modifier
                     .size(52.dp)
-                    .alpha(if (isDisabled) 0.3f else 1f)
+                    .alpha(if (isDisabled) DaySelectorDefaults.DisabledAlpha else 1f)
                     .clip(LinkItShape.card)
-                    .background(backgroundColor)
-                    .border(1.dp, borderColor, LinkItShape.card)
+                    .background(DaySelectorDefaults.backgroundColor(isSelected))
+                    .border(1.dp, DaySelectorDefaults.borderColor(isSelected), LinkItShape.card)
                     .clickable(enabled = !isDisabled) { onDaySelected(day) },
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center,
             ) {
                 Text(
                     text = "${day}일차",
-                    style = TextStyle(
-                        fontFamily = LinkItFontFamily,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 10.sp,
-                        lineHeight = 13.5.sp,
-                    ),
-                    color = dayLabelColor,
+                    style = DaySelectorDefaults.dayLabelStyle,
+                    color = DaySelectorDefaults.dayLabelColor(isSelected),
                 )
                 Text(
                     text = "$day",
-                    style = TextStyle(
-                        fontFamily = LinkItFontFamily,
-                        fontWeight = FontWeight.ExtraBold,
-                        fontSize = 16.sp,
-                        lineHeight = 21.6.sp,
-                        textAlign = TextAlign.Center,
-                    ),
-                    color = dayNumberColor,
+                    style = DaySelectorDefaults.dayNumberStyle,
+                    color = DaySelectorDefaults.dayNumberColor(isSelected),
                 )
             }
         }

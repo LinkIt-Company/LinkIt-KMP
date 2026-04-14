@@ -15,8 +15,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.linkit.company.core.designsystem.component.BottomNavTab
-import com.linkit.company.core.designsystem.component.LinkItBottomNavigationBar
 import com.linkit.company.core.designsystem.component.LinkItButton
 import com.linkit.company.core.designsystem.component.LinkItDaySelector
 import com.linkit.company.core.designsystem.component.LinkItDivider
@@ -231,32 +229,6 @@ private fun LinkItDaySelectorPreview() {
             selectedDay = 1,
             onDaySelected = {},
             availableDays = 4,
-        )
-    }
-}
-
-// endregion
-
-// region BottomNavigationBar
-
-@Preview(showBackground = true)
-@Composable
-private fun LinkItBottomNavigationBarMapPreview() {
-    LinkItTheme {
-        LinkItBottomNavigationBar(
-            selectedTab = BottomNavTab.Map,
-            onTabSelected = {},
-        )
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun LinkItBottomNavigationBarStoragePreview() {
-    LinkItTheme {
-        LinkItBottomNavigationBar(
-            selectedTab = BottomNavTab.Storage,
-            onTabSelected = {},
         )
     }
 }

@@ -13,10 +13,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.graphics.Color
 import com.linkit.company.core.designsystem.theme.G2
 import com.linkit.company.core.designsystem.theme.LinkItTextStyle
 import com.linkit.company.core.designsystem.theme.PrimaryBlue
 import com.linkit.company.core.designsystem.theme.Slate400
+
+object LinkItTabDefaults {
+    fun textColor(isSelected: Boolean): Color =
+        if (isSelected) PrimaryBlue else Slate400
+
+    fun indicatorColor(isSelected: Boolean): Color =
+        if (isSelected) PrimaryBlue else G2
+}
 
 @Composable
 fun LinkItTab(
@@ -42,14 +51,14 @@ fun LinkItTab(
                         Text(
                             text = title,
                             style = LinkItTextStyle.sectionTitle,
-                            color = if (isSelected) PrimaryBlue else Slate400,
+                            color = LinkItTabDefaults.textColor(isSelected),
                         )
                     }
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(2.dp)
-                            .background(if (isSelected) PrimaryBlue else G2),
+                            .background(LinkItTabDefaults.indicatorColor(isSelected)),
                     )
                 }
             }

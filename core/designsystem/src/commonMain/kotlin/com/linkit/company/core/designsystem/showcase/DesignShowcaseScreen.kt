@@ -26,8 +26,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.linkit.company.core.designsystem.component.BottomNavTab
-import com.linkit.company.core.designsystem.component.LinkItBottomNavigationBar
 import com.linkit.company.core.designsystem.component.LinkItButton
 import com.linkit.company.core.designsystem.component.LinkItDaySelector
 import com.linkit.company.core.designsystem.component.LinkItDivider
@@ -252,16 +250,6 @@ fun DesignShowcaseScreen(
                         onBackClick = {},
                     )
                 }
-            }
-
-            // ── BottomNavigationBar ──
-            item { SectionHeader("BottomNavigationBar") }
-            item {
-                var navTab by remember { mutableStateOf(BottomNavTab.Map) }
-                LinkItBottomNavigationBar(
-                    selectedTab = navTab,
-                    onTabSelected = { navTab = it },
-                )
             }
 
             // ── VideoCard ──
