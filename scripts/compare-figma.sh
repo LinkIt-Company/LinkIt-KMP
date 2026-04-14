@@ -69,10 +69,11 @@ curl -s -o "$FIGMA_IMAGE" "$IMAGE_URL"
 
 # 3. Figma 이미지에서 system chrome crop + 골든 이미지 크기에 맞게 리사이즈
 echo "3. Figma 이미지 crop + 리사이즈 중..."
-if /opt/homebrew/opt/python@3.10/bin/python3.10 -c "from PIL import Image" 2>/dev/null; then
-    PYTHON="/opt/homebrew/opt/python@3.10/bin/python3.10"
-else
+if python3 -c "from PIL import Image" 2>/dev/null; then
     PYTHON="python3"
+else
+    echo "오류: Pillow가 설치되어 있지 않습니다. pip3 install Pillow 를 실행해주세요."
+    exit 1
 fi
 $PYTHON -c "
 from PIL import Image
