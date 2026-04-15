@@ -27,3 +27,4 @@ screenshots/
 
 # Figma workspace
 .figma-workspace/
+.envrc
